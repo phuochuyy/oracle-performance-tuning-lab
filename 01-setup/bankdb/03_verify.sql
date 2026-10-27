@@ -1,7 +1,9 @@
 -- Row counts + checksums of BANKDB. Same scale => same numbers on any database.
 -- usage: sqlplus / as sysdba @03_verify.sql <pdb_name>
-set lines 120 pages 50
+set lines 120 pages 50 verify off
 col table_name for a14
+-- full digits: the default format rounds the sum to 5 significant digits
+col checksum for 99999999999999999999
 alter session set container = &1;
 
 select 'BRANCHES' table_name, count(*) row_count,
