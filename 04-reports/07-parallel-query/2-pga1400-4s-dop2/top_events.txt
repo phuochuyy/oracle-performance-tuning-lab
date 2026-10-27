@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 229.1	      62.8
+direct path read			 User I/O	     149829	  54.3	      14.9
+direct path write temp			 User I/O	       9838	  37.1	      10.2
+PX qref latch				 Other		       8054	  29.5	       8.1
+Failed Logon Delay			 Other			 10	    10	       2.8
+PX Deq: Join ACK			 Other			826	    .9		.2
+PX Deq: Slave Session Stats		 Other		       1662	    .7		.2
+direct path read temp			 User I/O	       9837	    .6		.2
+
+8 rows selected.
+

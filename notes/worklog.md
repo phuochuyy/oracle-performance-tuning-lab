@@ -71,3 +71,69 @@ silent; `set serveroutput on` again → print works. Package state is per contai
 must be enabled after the switch. Moved `set serveroutput on` below the `alter session`.
 (Two failed attempts first: SQL*Plus read `: in` inside `exec` as a bind variable, then my
 single quotes were eaten by the outer `ssh '...'` — wrote the test as a file and copied it.)
+
+## FRA housekeeping before case 5
+
+FRA on orcl3 reached 7.4 / 16 GB with only 55 MB reclaimable: the standby `ORCL3_STB` had been
+down for days and `ARCHIVELOG DELETION POLICY` was `NONE`. Started Region B again (`labctl.sh dg-b`)
+so the standby caught up (transport/apply lag 0 s), then set
+`CONFIGURE ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY`. Reclaimable went 55 MB → 3,755 MB
+(archived logs 22 % reclaimable). The FRA now frees applied logs by itself when it needs space.
+Note: with policy `NONE` and no backups, archived logs are never reclaimable — catching up the
+standby alone would not have helped.
+
+## Case 5 — partitioning (branch `case/05-partitioning`)
+
+**Problem 8 — ORA-01418 on the online conversion.** `UPDATE INDEXES (transactions_pk GLOBAL, ...)`
+resolves unqualified index names in the current schema — SYS, because I run as SYSDBA. The statement
+failed at parse time (nothing changed). Fix: `alter session set current_schema = BANK`.
+
+**Problem 9 — a regression I almost missed, and a baseline I did miss.** After partitioning I
+re-ran the other workloads on purpose: the statement query was fine, but the pending query went
+from index to a full scan of the December partition and got slower. I had not re-measured that
+query in the new environment before the change — lesson: baseline every query a change can touch.
+Compared both plans directly (index 3.07 ms vs optimizer's full scan 7.33 ms), then fixed it with a
+covering local index (0.58 ms). Kept the old index INVISIBLE until the workload confirmed the fix.
+
+## Incident after case 5 — standby FRA full, FSFO unsynchronized
+
+**Symptom:** Region B broker status `ERROR` — `ORA-16857 member disconnected from redo source`,
+`ORA-16817 unsynchronized fast-start failover configuration`. Standby alert log:
+`ORA-19809: limit exceeded for recovery files` (stb3 FRA 10,226 / 10,240 MB, 0 reclaimable).
+**Cause:** the online partition conversion generated several GB of redo (FORCE LOGGING), and the
+standby also had `ARCHIVELOG DELETION POLICY NONE`, so applied logs were never freed.
+**Impact:** while it lasted, a failover would not have been zero data loss.
+**Fix:** on stb3 `CONFIGURE ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY` +
+`DELETE ARCHIVELOG ALL` (only applied logs are deleted) → 10.2 GB → 2.0 GB; transport reconnected by
+itself and the configuration returned to SUCCESS, FSFO target valid again. On prm3 deleted logs
+already applied on the standby (logs not yet applied were kept: RMAN-08120), FRA 12.9 → 5.3 GB.
+Then `fstrim -a` in prm3 and stb3 (disks use discard=unmap): host free space 23 → 31 GB.
+
+**My mistake while checking:** my wait loop grepped `^SUCCESS` over the output of
+`show configuration` + `show database` and stopped on the *database* status line while the
+*configuration* was still ERROR. Fixed by grepping only the line after `Configuration Status:`.
+Second time today a check of mine passed for the wrong reason.
+
+**Not done on purpose:** `BANK_DATA` has 1.7 GB free inside a 3.3 GB datafile (old table copy),
+but the high-water mark is at the end of the file (ORA-03297 on resize). 23ai
+`DBMS_SPACE.SHRINK_TABLESPACE` (analyze mode) would move 76 objects / 1.4 GB to reach 1.78 GB — that
+move would itself generate ~1.4 GB of redo on both sites under FORCE LOGGING. No real gain now; left
+as is.
+
+**Before the next big change:** check FRA on the primary *and* the standby.
+
+## Case 7 — parallel query (branch `case/07-parallel-query`)
+
+**Problem 10 — my "wait until finished" loops never finished.** I waited for the background matrix
+with `until ssh prm3 '! pgrep -f run_matrix.sh'`. The remote `bash -c '... run_matrix.sh ...'`
+started by ssh contains the pattern itself, so `pgrep -f` always matched its own shell and the loop
+spun forever (the matrix itself finished fine). Noticed only when asked why it took so long. Fix:
+wait on the matrix log (`grep -c " done "` reaching 5) instead of on process names. Same family of
+mistake as problems 2 and the broker-status check: a check that cannot return the other answer.
+
+**Case 7 diagnosis notes.** My first SQL Monitor query looked only at QC rows (0.01 s, 90 gets —
+the coordinator does almost nothing) and had `OR ... AND` without brackets; summing QC + PX rows per
+`sql_exec_id` showed the real picture. I also repeated the checksum-rounding mistake in
+`wl_results.sql` (fixed the same way as `03_verify.sql`). Root cause: PGA target 446 MB vs ~1.2 GB
+really used → auto target 28 MB → random hash-join spills. Raised target to 1,400 MB (advisor:
+over-allocation 0 from 1,338 MB). Even 4-session serial went 12.4 s → 4.59 s.

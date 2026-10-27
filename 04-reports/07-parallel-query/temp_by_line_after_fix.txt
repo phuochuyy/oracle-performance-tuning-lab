@@ -1,0 +1,12 @@
+
+Session altered.
+
+
+	ID OPERATION			       EXECS EXECS_WITH_TEMP MAX_TEMP_MB MAX_MEM_MB
+---------- ------------------------------ ---------- --------------- ----------- ----------
+	 3 HASH GROUP BY			  80		   0			 .9
+	 6 HASH GROUP BY			  80		   0
+	 7 HASH JOIN				  80		   4	      15       34.3
+	10 HASH JOIN BUFFERED			  80		  76	      11       19.8
+	11 HASH JOIN				  80		   0			1.6
+

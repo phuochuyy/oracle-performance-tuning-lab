@@ -1,0 +1,8 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC
+---------------------------------------- ---------- ---------- ---------- ------------- -------------
+05-partitioning/3-after-covering-index		  4	808755	      120	6739.53 	    1
+

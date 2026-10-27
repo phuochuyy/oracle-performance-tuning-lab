@@ -1,0 +1,8 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC
+---------------------------------------- ---------- ---------- ---------- ------------- -------------
+07-parallel-query/2-pga1400-4s-dop2		  4	   206	      121	   1.71 	    1
+
