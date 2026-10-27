@@ -1,0 +1,63 @@
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID 1b62d9m3rpg0a
+--------------------
+UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE + :B2 WHERE ACCOUNT_ID = :B1
+
+Plan hash value: 534365006
+
+----------------------------------------------------------------------------------
+| Id  | Operation	   | Name	 | Rows  | Bytes | Cost (%CPU)| Time	 |
+----------------------------------------------------------------------------------
+|   0 | UPDATE STATEMENT   |		 |	 |	 |     3 (100)| 	 |
+|   1 |  UPDATE 	   | ACCOUNTS	 |	 |	 |	      | 	 |
+|*  2 |   INDEX UNIQUE SCAN| ACCOUNTS_PK |     1 |    55 |     2   (0)| 00:00:01 |
+----------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("ACCOUNT_ID"=:B1)
+
+SQL_ID ck8pmcu0z92cb
+--------------------
+UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE - :B2 WHERE ACCOUNT_ID = :B1
+
+Plan hash value: 534365006
+
+----------------------------------------------------------------------------------
+| Id  | Operation	   | Name	 | Rows  | Bytes | Cost (%CPU)| Time	 |
+----------------------------------------------------------------------------------
+|   0 | UPDATE STATEMENT   |		 |	 |	 |     3 (100)| 	 |
+|   1 |  UPDATE 	   | ACCOUNTS	 |	 |	 |	      | 	 |
+|*  2 |   INDEX UNIQUE SCAN| ACCOUNTS_PK |     1 |    55 |     2   (0)| 00:00:01 |
+----------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("ACCOUNT_ID"=:B1)
+
+SQL_ID f3jggcu1ud4g9
+--------------------
+INSERT INTO BANK.TRANSFER_LOG (FROM_ACCT, TO_ACCT, AMOUNT) VALUES (:B3
+, :B2 , :B1 )
+
+Plan hash value: 2771768670
+
+---------------------------------------------------------
+| Id  | Operation		 | Name 	| Cost	|
+---------------------------------------------------------
+|   0 | INSERT STATEMENT	 |		|     1 |
+|   1 |  LOAD TABLE CONVENTIONAL | TRANSFER_LOG |	|
+|   2 |   SEQUENCE		 | ISEQ$$_72796 |	|
+---------------------------------------------------------
+
+Note
+-----
+   - cpu costing is off (consider enabling it)
+
+
+57 rows selected.
+

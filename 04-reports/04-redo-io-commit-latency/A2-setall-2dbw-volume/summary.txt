@@ -1,0 +1,10 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC	  ERRORS
+---------------------------------------- ---------- ---------- ---------- ------------- ------------- ----------
+04-redo-io-commit-latency/A2-setall-2dbw	  4    1923924	      120      16031.99 	    1	       0
+-volume
+
+

@@ -1,0 +1,8 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+0nuhpn0sjujg8	       0	  4   120009252       3919732.5        201216		1582		 1 BEGIN bank.wl_transfer_wait('04-redo-io-commit-latency/B2-fa
+ck8pmcu0z92cb  534365006      71441	   59.9 	   56.4 	    5		   0		 1 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE - :B2 WHERE ACCOU
+f3jggcu1ud4g9 2771768670      71308	   33.4 	   30.7 	    1		   0		 1 INSERT INTO BANK.TRANSFER_LOG (FROM_ACCT, TO_ACCT, AMOUNT) V
+1b62d9m3rpg0a  534365006      71568	   22.9 	   21.7 	    4		   0		 1 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE + :B2 WHERE ACCOU
+
