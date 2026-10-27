@@ -1,7 +1,16 @@
 # Oracle Performance Tuning Lab — AWR · ASH · ADDM · SQL tuning · Partitioning
 
-> Status: **planned**. Supersedes the `oracle-awr-lab` skeleton. Every case below must end with
-> real before/after numbers and the reports that prove them.
+> Status: **in progress** — 2 of 8 cases done. Every case ends with real before/after numbers and
+> the AWR evidence that proves them. Shared dataset: [BANKDB](01-setup/bankdb/) (8 M transactions).
+
+## Results so far
+
+| # | Case | Before | After | Fix |
+|---|------|--------|-------|-----|
+| 1 | [Missing index](03-cases/01-missing-index/) | 787.8 ms/exec, 186,670 gets, full scan | 0.039 ms/exec, 5 gets | composite index `(account_id, txn_ts)`, no sort |
+| 2 | [Plan regression after stats refresh](03-cases/02-plan-regression-spm/) | 10.3 ms → **583.6 ms** after histograms were dropped | 9.5 ms with SPM, 10.7 ms after stats restore | SPM baseline from AWR, then `RESTORE_TABLE_STATS` |
+
+Problems I hit while building this (and how I fixed them): [notes/worklog.md](notes/worklog.md).
 
 ## Goal
 

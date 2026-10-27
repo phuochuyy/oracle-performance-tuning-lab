@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				   227		59
+direct path read			 User I/O	     697355	 155.7	      40.4
+SQL*Net vector data to client		 Network	       2130	    .8		.2
+write complete waits			 Configuration		 28	    .4		.1
+db file sequential read 		 User I/O		951	    .3		.1
+log file sync				 Commit 		 49	    .2		 0
+SQL*Net message to client		 Network	       9404	    .1		 0
+local write wait			 User I/O		 12	    .1		 0
+
+8 rows selected.
+
