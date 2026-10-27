@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+write complete waits			 Configuration		 25	 256.1		33
+free buffer waits			 Configuration	      16933	 201.7		26
+log file switch (checkpoint incomplete)  Configuration		 28	 143.7	      18.5
+DB CPU					 CPU				    60	       7.7
+log buffer space			 Configuration		167	    32	       4.1
+buffer busy waits			 Concurrency	       5892	  26.7	       3.4
+log file sync				 Commit 		 61	  10.6	       1.4
+db file scattered read			 User I/O	       4324	  10.1	       1.3
+
+8 rows selected.
+

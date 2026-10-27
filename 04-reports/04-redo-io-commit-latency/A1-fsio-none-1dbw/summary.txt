@@ -1,0 +1,10 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC	  ERRORS
+---------------------------------------- ---------- ---------- ---------- ------------- ------------- ----------
+04-redo-io-commit-latency/A1-fsio-none-1	  4	 59252	      120	  493.7 	    1	       0
+dbw
+
+
