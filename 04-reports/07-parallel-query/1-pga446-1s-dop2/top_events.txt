@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+direct path write temp			 User I/O	      45749	 115.9	      47.6
+DB CPU					 CPU				 106.8	      43.8
+Failed Logon Delay			 Other			 10	    10	       4.1
+direct path read			 User I/O	      74385	   7.2		 3
+PX qref latch				 Other		      10208	   1.5		.6
+direct path read temp			 User I/O	      45758	    .9		.4
+Disk file operations I/O		 User I/O		649	    .5		.2
+log file sync				 Commit 		 64	    .3		.1
+
+8 rows selected.
+

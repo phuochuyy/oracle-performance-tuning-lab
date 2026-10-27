@@ -1,0 +1,7 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+11dym5b7psavp	       0	  1   120227418       101909153       3210552	     3010905		 1 BEGIN bank.wl_annual_serial('07-parallel-query/1-pga446-1s-s
+c8kyw8pz8jf1k 2189913597	 58   2072348.3       1756546.6 	55347	       51912		 9 select /*+ no_parallel */ b.region, a.product, count(*), sum
+5h3t07agdqsr7	       0	 58	  193.8 	  189.3 	    4		   0		 1 INSERT INTO BANK.WL_RESULTS VALUES (:B6 , :B5 , :B4 , :B3 ,
+
