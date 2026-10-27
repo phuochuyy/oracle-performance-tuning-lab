@@ -1,0 +1,6 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+8wx3gpt1vwa72 4088813652	824    583572.3 	 267424 	93312	       93194		 1 SELECT COUNT(*), SUM(AMOUNT) FROM BANK.TRANSACTIONS WHERE ST
+60nj01b3xdmrp	       0	  4   119506733      54773300.8      19245916	    19243079		 1 BEGIN bank.wl_pending('02-plan-regression-spm/2-regressed',
+
