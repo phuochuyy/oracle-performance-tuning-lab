@@ -1,0 +1,8 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC
+---------------------------------------- ---------- ---------- ---------- ------------- -------------
+05-partitioning/1-before-monthly		  4	   616	      120	   5.13 	    5
+

@@ -1,0 +1,29 @@
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID 0asu682bpqmqq
+--------------------
+SELECT CHANNEL, COUNT(*) CNT, SUM(AMOUNT) TOTAL FROM BANK.TRANSACTIONS
+WHERE TXN_TS >= :B2 AND TXN_TS < :B1 AND STATUS = 'POSTED' GROUP BY
+CHANNEL
+
+Plan hash value: 1083525209
+
+------------------------------------------------------------------------------------
+| Id  | Operation	    | Name	   | Rows  | Bytes | Cost (%CPU)| Time	   |
+------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT    |		   |	   |	   | 25470 (100)|	   |
+|   1 |  HASH GROUP BY	    |		   |	 5 |   155 | 25470   (1)| 00:00:01 |
+|*  2 |   FILTER	    |		   |	   |	   |		|	   |
+|*  3 |    TABLE ACCESS FULL| TRANSACTIONS |   318K|  9655K| 25464   (1)| 00:00:01 |
+------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter(:B1>:B2)
+   3 - filter(("TXN_TS">=:B2 AND "TXN_TS"<:B1 AND "STATUS"='POSTED'))
+
+
+23 rows selected.
+

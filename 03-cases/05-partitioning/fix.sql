@@ -8,6 +8,9 @@
 whenever sqlerror exit failure
 set timing on verify off lines 200
 alter session set container = &1;
+-- index names in UPDATE INDEXES are resolved in the current schema (SYS when run as SYSDBA):
+-- without this the statement fails with ORA-01418 'specified index does not exist'
+alter session set current_schema = BANK;
 
 alter table bank.transactions modify
   partition by range (txn_ts) interval (numtoyminterval(1, 'MONTH'))
