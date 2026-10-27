@@ -1,0 +1,42 @@
+== before
+filesystemio_options		     string	 none
+db_writer_processes		     integer	 1
+filesystemio_options		     string	 none
+db_writer_processes		     integer	 1
+System altered.
+System altered.
+System altered.
+System altered.
+== restart standby
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+ORACLE instance started.
+Total System Global Area 1406373344 bytes
+Fixed Size		    5008864 bytes
+Variable Size		  570425344 bytes
+Database Buffers	  822083584 bytes
+Redo Buffers		    8855552 bytes
+Database mounted.
+== restart primary
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+ORACLE instance started.
+Total System Global Area 1406373344 bytes
+Fixed Size		    5008864 bytes
+Variable Size		  889192448 bytes
+Database Buffers	  503316480 bytes
+Redo Buffers		    8855552 bytes
+Database mounted.
+Database opened.
+== after
+filesystemio_options		     string	 SETALL
+db_writer_processes		     integer	 2
+READ WRITE
+filesystemio_options		     string	 SETALL
+db_writer_processes		     integer	 2
+MOUNTED
+Fast-Start Failover: Enabled in Zero Data Loss Mode
+Configuration Status:
+SUCCESS   (status updated 11 seconds ago)

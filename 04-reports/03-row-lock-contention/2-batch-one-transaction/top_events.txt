@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+enq: TX - row lock contention		 Application		 75	 263.5	      41.9
+write complete waits			 Configuration		 27	 110.4	      17.6
+log file switch (checkpoint incomplete)  Configuration		 25	  95.6	      15.2
+enq: HW - contention			 Configuration		 47	  48.2	       7.7
+DB CPU					 CPU				  38.3	       6.1
+buffer busy waits			 Concurrency	       5025	  18.5	       2.9
+log file sync				 Commit 		 71	  11.1	       1.8
+library cache: mutex X			 Concurrency	       9314	    11	       1.8
+
+8 rows selected.
+

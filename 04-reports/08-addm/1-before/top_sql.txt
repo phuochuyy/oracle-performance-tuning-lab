@@ -1,0 +1,8 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+96rukypan95kd	       0	  4   120165303      32586658.3       5349782	       40647		 1 BEGIN bank.wl_transfer('08-addm/1-before', 120); END;
+f3jggcu1ud4g9 2771768670    1906722	   81.1 	   14.1 	    1		   0		 1 INSERT INTO BANK.TRANSFER_LOG (FROM_ACCT, TO_ACCT, AMOUNT) V
+ck8pmcu0z92cb  534365006    1906452	   74.1 	     18 	    5		   0		 1 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE - :B2 WHERE ACCOU
+1b62d9m3rpg0a  534365006    1906584	   44.9 	   11.4 	    4		   0		 1 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE + :B2 WHERE ACCOU
+

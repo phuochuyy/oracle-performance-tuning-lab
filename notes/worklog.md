@@ -137,3 +137,91 @@ the coordinator does almost nothing) and had `OR ... AND` without brackets; summ
 `wl_results.sql` (fixed the same way as `03_verify.sql`). Root cause: PGA target 446 MB vs ~1.2 GB
 really used → auto target 28 MB → random hash-join spills. Raised target to 1,400 MB (advisor:
 over-allocation 0 from 1,338 MB). Even 4-session serial went 12.4 s → 4.59 s.
+
+## Case 3 — row lock contention (branch `case/03-row-lock-contention`)
+
+**Problem 11 — ORA-12899 at the end of the incident run.** `RUN_TAG VARCHAR2(40)` and the tag
+`03-row-lock-contention/2-batch-one-transaction` is 46 characters. The 120 s workload ran, only the
+final result insert failed, and `run_workload.sh` stopped (`set -e`) before the ASH step. Widened
+the column to 100 (`wl_widen_tag.sql`, and in the create scripts) and re-ran the incident.
+
+**What I learned:** ASH showed *that* SID 330 blocked 4 sessions, but not *what* it was doing — an
+idle blocker is not sampled, and it was gone when I queried. The live `v$session` tree at t=40 s
+is what showed `BANK_BATCH / INTEREST` sleeping with locks held. Capture the live tree during the
+incident; ASH alone is not enough.
+
+**Found on the way (for case 4):** baseline spends 65 % of DB time in `write complete waits`;
+redo groups stay ACTIVE; `filesystemio_options = none`, 1 DB writer. And PL/SQL commits inside a
+loop do not wait for `log file sync`, so commit latency must be measured from a client.
+
+## FRA check after case 3 — archived logs not reclaimable (open question)
+
+After ~2.2 M transfers, FRA was prm3 12.0 / 16 GB and stb3 8.0 / 10 GB, with only ~3 % of archived
+logs reclaimable — although `ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY` was set on both
+and the logs were applied on the standby (`V$ARCHIVED_LOG` dest 2 `APPLIED = YES`).
+`RMAN DELETE ARCHIVELOG ALL` then deleted 31 logs on prm3 and 25 on stb3 without warnings (kept only
+logs not yet applied, RMAN-08120); GoldenGate was not holding them (capture `REQUIRED_CHECKPOINT_SCN`
+recent, no RMAN-08137). FRA after: prm3 7.0 GB, stb3 4.2 GB.
+So RMAN considered the logs deletable while the FRA did not count them as reclaimable. Not
+explained yet (one guess: logs kept for Flashback Database within the 24 h retention target —
+unconfirmed). Practical answer for now: a policy-respecting `DELETE ARCHIVELOG ALL` job on both
+sites → to be built properly in oracle-backup-recovery-drills.
+
+## Case 4 — redo / DBWR / commit latency (branch `case/04-redo-io-commit-latency`)
+
+**Problem 12 — standby FRA full again, by my own doing.** The SETALL volume run generated 3.6 GB of
+redo; stb3's FRA (10 GB) was already 4.2 GB and its applied logs are not auto-reclaimed (see the open
+question above), so it filled up: ORA-19809, transport stopped, FSFO unsynchronized. I had written the
+rule "check FRA on both sites before a big change" and still started the run without it. Fixed with
+`DELETE ARCHIVELOG ALL` on both sites (stb3 10.2 → 2.2 GB), configuration back to SUCCESS. Ruled out a
+guaranteed restore point holding the logs (none exist). Action: an automatic archived-log
+housekeeping job on both sites, before any further heavy-redo test.
+
+**Problem 13 — ORA-16654** changing `LogXptMode` with FSFO enabled; first run left primary FASTSYNC
+and standby SYNC.
+
+**Problem 14 — `set -e` + `grep -v` on empty output** stopped `set_transport.sh` right after
+disabling FSFO. Another check that could only give one answer — this time the other way round.
+
+## Case 6 — compression (branch `case/06-compression`)
+
+Guessed that after compression the smaller segment would be read through the buffer cache instead
+of direct path — wrong: reads ≈ gets in both runs. The real story was CPU: the report is CPU-bound,
+compression cut blocks read by 57 % but raised CPU per execution by 44 %. Also left a broken draft
+query (ORA-24856, `TO_LOB`) at the top of one of my checks — harmless, but sloppy.
+
+Side finding: `Failed Logon Delay` in AWR → unified audit trail shows 275 failed SYS logons
+(ORA-01031) from the observer host obs-r2 and 5 ORA-01017 from stb3. Parked for the security project.
+
+## Case 8 — ADDM (branch `case/08-addm`)
+
+**Found the real cause of the standby FRA problem on the way.** Before the after-run I checked the
+FRA (rule from case 4) and saw 19 standby logs that RMAN would not delete although apply lag was 0 s:
+they were `APPLIED = 'IN-MEMORY'` — applied in memory, standby datafiles never checkpointed past them,
+because `fast_start_mttr_target = 0`. Setting it to 300 turned them into `APPLIED = YES` within 90 s
+and housekeeping deleted them (stb3 5.9 → 2.3 GB). Documented as F8 in oracle-ha-dr-failover-lab.
+Also checked a second guess on the way: the standby's *average* apply rate (4 MB/s) looked too slow,
+but the *active* rate was 24 MB/s — the average includes idle time.
+
+**ADDM's top actionable finding was a false lead.** Raising the identity sequence cache did not change
+the "Sequence Usage" finding; a control run with the old cache was in between before/after; a direct
+test showed only 4 row-cache refills for 10,000 NEXTVAL (23ai dynamic sequence cache). Without the
+control run I would have claimed +8 %.
+
+**Two false alarms of mine about time.** Twice I thought the housekeeping timer had skipped a run,
+both times because I guessed the current time instead of checking `date`. The timer counts 10 min
+from the last activation, including my manual starts. Check `date` before saying something is late.
+
+## Near miss after case 8 — primary FRA at 99.7 %
+
+The three case-8 runs (before / after / control) generated ~11 GB of redo in ~15 minutes. When I did
+the final health check: prm3 FRA 16,327 / 16,384 MB, stb3 9,754 / 10,240 MB, host disk 13 GB free.
+A full primary FRA means `ORA-00257` (archiver stuck) and the whole database stops. The housekeeping
+timer had run on time, but every 10 minutes is not enough for ~0.7 GB of redo per minute, and I did not
+check the FRA *between* the runs — only before the first one.
+Recovered: housekeeping on stb3 then prm3 → stb3 5.9 GB, prm3 8.8 GB; alert log shows no ORA-00257 /
+ORA-19809, the database never stalled. `fstrim` → host 23 GB free.
+What is left in the primary FRA is mostly flashback logs (38 %, ~6.3 GB, retention target 24 h).
+Lessons: check FRA between heavy runs, not only before the first; for heavy-redo tests run the
+housekeeping between runs; consider a shorter `db_flashback_retention_target` and FRA usage alerting
+→ both belong in oracle-backup-recovery-drills.

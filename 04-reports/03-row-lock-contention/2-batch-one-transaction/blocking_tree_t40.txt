@@ -1,0 +1,9 @@
+
+WHO		SID    SERIAL#	  BLK_SID STATUS   EVENT				WAIT_CLASS							       SECS MODULE	 ACTION 	  SQL_ID	 N_BLOCKED
+-------- ---------- ---------- ---------- -------- ------------------------------------ ---------------------------------------------------------------- ---------- ------------ ---------------- ------------- ----------
+BLOCKER 	330	 44022		  ACTIVE   PL/SQL lock timer			Idle									 14 BANK_BATCH	 INTEREST	  6knng30tpx1gc 	 4
+waiter		 76	 36337	      330 ACTIVE   enq: TX - row lock contention	Application								 18 BANK_APP	 TRANSFER	  ck8pmcu0z92cb 	 0
+waiter		101	 10217	      330 ACTIVE   enq: TX - row lock contention	Application								 18 BANK_APP	 TRANSFER	  ck8pmcu0z92cb 	 0
+waiter		104	 47534	      330 ACTIVE   enq: TX - row lock contention	Application								 14 BANK_APP	 TRANSFER	  ck8pmcu0z92cb 	 0
+waiter		329	 26985	      330 ACTIVE   enq: TX - row lock contention	Application								 18 BANK_APP	 TRANSFER	  ck8pmcu0z92cb 	 0
+

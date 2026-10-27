@@ -1,0 +1,25 @@
+== DB time by event (samples ~ seconds)
+
+EVENT					SAMPLES        PCT
+------------------------------------ ---------- ----------
+enq: TX - row lock contention		    261       48.5
+ON CPU					     75       13.9
+log file switch (checkpoint incomple	     71       13.2
+te)
+
+enq: HW - contention			     45        8.4
+buffer busy waits			     22        4.1
+log buffer space			     18        3.3
+DLM cross inst call completion		     16 	 3
+library cache: mutex X			     16 	 3
+
+8 rows selected.
+
+== Lock waits by blocking session
+
+   BLK_SID BLK_SERIAL WAIT_SAMPLES WAITING_SESSIONS BLK_MODULE							     BLK_ACTION 						      BLK_STAT
+---------- ---------- ------------ ---------------- ---------------------------------------------------------------- ---------------------------------------------------------------- --------
+       330	44022	       252		  4
+       101	10217		 6		  1
+       104	47534		 3		  1
+
