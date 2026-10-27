@@ -1,0 +1,40 @@
+
+Session altered.
+
+Elapsed: 00:00:00.00
+moved SYS_P456
+moved SYS_P455
+moved SYS_P461
+moved SYS_P447
+moved SYS_P459
+moved SYS_P449
+moved SYS_P452
+moved SYS_P462
+moved SYS_P465
+moved SYS_P451
+moved SYS_P464
+moved SYS_P470
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:04:42.62
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:00:20.79
+
+INDEX_NAME
+--------------------------------------------------------------------------------
+STATUS
+--------
+TRANSACTIONS_PK
+VALID
+
+
+Elapsed: 00:00:00.03
+
+UNUSABLE_INDEX_PARTITIONS
+-------------------------
+			0
+
+Elapsed: 00:00:00.04

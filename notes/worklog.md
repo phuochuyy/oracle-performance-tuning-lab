@@ -182,3 +182,13 @@ and standby SYNC.
 
 **Problem 14 — `set -e` + `grep -v` on empty output** stopped `set_transport.sh` right after
 disabling FSFO. Another check that could only give one answer — this time the other way round.
+
+## Case 6 — compression (branch `case/06-compression`)
+
+Guessed that after compression the smaller segment would be read through the buffer cache instead
+of direct path — wrong: reads ≈ gets in both runs. The real story was CPU: the report is CPU-bound,
+compression cut blocks read by 57 % but raised CPU per execution by 44 %. Also left a broken draft
+query (ORA-24856, `TO_LOB`) at the top of one of my checks — harmless, but sloppy.
+
+Side finding: `Failed Logon Delay` in AWR → unified audit trail shows 275 failed SYS logons
+(ORA-01031) from the observer host obs-r2 and 5 ORA-01017 from stb3. Parked for the security project.

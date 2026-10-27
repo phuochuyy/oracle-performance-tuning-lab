@@ -1,6 +1,6 @@
 # Oracle Performance Tuning Lab — AWR · ASH · ADDM · SQL tuning · Partitioning
 
-> Status: **in progress** — 6 of 8 cases done. Every case ends with real before/after numbers and
+> Status: **in progress** — 7 of 8 cases done. Every case ends with real before/after numbers and
 > the AWR evidence that proves them. Shared dataset: [BANKDB](01-setup/bankdb/) (8 M transactions).
 
 ## Results so far
@@ -12,6 +12,7 @@
 | 3 | [Row lock contention](03-cases/03-row-lock-contention/) | transfers 4,100/s during the interest batch, `enq: TX` 41.9 % | 6,535/s (baseline 6,619/s), no `enq: TX` | blocker found with live blocking tree + ASH; batch commits every 100 rows |
 | 4 | [Redo, DBWR, commit latency](03-cases/04-redo-io-commit-latency/) | volume 7,014 tx/s, `write complete waits` 33 %; commit 7.53 ms (SYNC) | 16,032 tx/s with async/direct IO + 2 DBWR; FASTSYNC 6.48 ms, ASYNC 5.96 ms | `filesystemio_options=SETALL`, `db_writer_processes=2`; measured the cost of zero data loss |
 | 5 | [Partitioning](03-cases/05-partitioning/) | monthly report 779.9 ms, 93,426 gets | 81.9 ms, 3,907 gets (pruning) | online interval partitioning; regression found in another query → covering local index (17.0 → 0.58 ms) |
+| 6 | [Compression of historical partitions](03-cases/06-compression/) | 2024 partitions 379 MB; yearly report 357.6 ms | 163 MB (−57 %); report ~30 % **slower** (CPU +44 %), updates 2.35× redo | BASIC compression (EE, no extra license); kept for space, trade-off documented |
 | 7 | [Parallel query / PGA](03-cases/07-parallel-query/) | DOP 2 report 0.50–4.34 s (random TEMP spills), 4 users serial 12.4 s | DOP 2 0.55–0.81 s, 4 users serial 4.59 s / DOP 2 2.34 s | PGA target 446 MB → 1,400 MB (instance really used ~1.2 GB) |
 
 Problems I hit while building this (and how I fixed them): [notes/worklog.md](notes/worklog.md).
