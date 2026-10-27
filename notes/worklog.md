@@ -1,0 +1,36 @@
+# Worklog
+
+What I did, what went wrong, how I fixed it. Newest at the bottom.
+
+## Dataset (branch `feature/bankdb-dataset`)
+
+**Before loading — checked the target CDB (orcl3 on prm3):**
+
+- `FORCE LOGGING = YES` (Data Guard) and `FLASHBACK ON` → direct-path/NOLOGGING does not avoid
+  redo; every GB loaded becomes archived log + flashback log in the FRA.
+- FRA was 10 GB with 4 GB used and almost nothing reclaimable (archived logs: 0% reclaimable,
+  `ARCHIVELOG DELETION POLICY TO NONE`). A multi-GB load could fill it → `ORA-00257` and the
+  database stops. Raised `db_recovery_file_dest_size` to 16 GB (the `/u02` disk had 30 GB free).
+- Created the PDB with `STANDBYS=NONE`: it is a test sandbox, the standby does not need its data.
+
+**Smoke test at scale 1:** loaded in ~7 s, distributions match the design (segments 85/12/3 %,
+status 97/2/1 %, 30.7 % of rows on hot accounts), 0 Luhn failures, 0 orphan rows.
+
+**Problem 1 — checksums were useless.** `03_verify.sql` printed `1.0745E+15`: SQL*Plus default
+number format keeps ~5 significant digits, so two different datasets could print the same value.
+Fix: `col checksum for 99999999999999999999`.
+
+**Problem 2 — my determinism test passed when it should not have.** I compared two verify runs
+with `grep "^[A-Z]+ +[0-9]"` and `diff` said IDENTICAL — but both files were empty: SQL*Plus
+separates columns with tabs, not spaces. Fixed the pattern (`[[:space:]]+`) and added a check that
+the file is not empty. Lesson: check that a test can fail before trusting a pass.
+Real result: two loads at scale 1 → identical counts and checksums for all 5 tables.
+
+**Reload:** truncating a parent table fails with `ORA-02266` while an enabled FK points to it, even
+when the child is empty → `04_reset.sql` disables the FKs, truncates, re-enables.
+
+**Scale 16 load:** 8 M transactions in 3 min 43 s. While it ran, the session waited on
+`Data file init write` — the tablespace autoextending 256 MB at a time. A bigger `NEXT` (or
+pre-sizing the datafile) would remove that wait; noted for the tuning cases. FRA 4.4 → 5.8 GB,
+well under the new 16 GB limit. `TRANSACTIONS` = 736 MB, about the size of the buffer cache, so
+full scans will do real physical reads.
