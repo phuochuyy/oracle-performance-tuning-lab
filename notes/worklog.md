@@ -137,3 +137,19 @@ the coordinator does almost nothing) and had `OR ... AND` without brackets; summ
 `wl_results.sql` (fixed the same way as `03_verify.sql`). Root cause: PGA target 446 MB vs ~1.2 GB
 really used → auto target 28 MB → random hash-join spills. Raised target to 1,400 MB (advisor:
 over-allocation 0 from 1,338 MB). Even 4-session serial went 12.4 s → 4.59 s.
+
+## Case 3 — row lock contention (branch `case/03-row-lock-contention`)
+
+**Problem 11 — ORA-12899 at the end of the incident run.** `RUN_TAG VARCHAR2(40)` and the tag
+`03-row-lock-contention/2-batch-one-transaction` is 46 characters. The 120 s workload ran, only the
+final result insert failed, and `run_workload.sh` stopped (`set -e`) before the ASH step. Widened
+the column to 100 (`wl_widen_tag.sql`, and in the create scripts) and re-ran the incident.
+
+**What I learned:** ASH showed *that* SID 330 blocked 4 sessions, but not *what* it was doing — an
+idle blocker is not sampled, and it was gone when I queried. The live `v$session` tree at t=40 s
+is what showed `BANK_BATCH / INTEREST` sleeping with locks held. Capture the live tree during the
+incident; ASH alone is not enough.
+
+**Found on the way (for case 4):** baseline spends 65 % of DB time in `write complete waits`;
+redo groups stay ACTIVE; `filesystemio_options = none`, 1 DB writer. And PL/SQL commits inside a
+loop do not wait for `log file sync`, so commit latency must be measured from a client.
