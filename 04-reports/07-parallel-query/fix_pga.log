@@ -1,0 +1,9 @@
+System altered.
+NAME									 MB
+---------------------------------------------------------------- ----------
+aggregate PGA target parameter					       1400
+aggregate PGA auto target						 28
+global memory bound							 89
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+pga_aggregate_limit		     big integer 2800M

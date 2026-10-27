@@ -121,3 +121,19 @@ move would itself generate ~1.4 GB of redo on both sites under FORCE LOGGING. No
 as is.
 
 **Before the next big change:** check FRA on the primary *and* the standby.
+
+## Case 7 — parallel query (branch `case/07-parallel-query`)
+
+**Problem 10 — my "wait until finished" loops never finished.** I waited for the background matrix
+with `until ssh prm3 '! pgrep -f run_matrix.sh'`. The remote `bash -c '... run_matrix.sh ...'`
+started by ssh contains the pattern itself, so `pgrep -f` always matched its own shell and the loop
+spun forever (the matrix itself finished fine). Noticed only when asked why it took so long. Fix:
+wait on the matrix log (`grep -c " done "` reaching 5) instead of on process names. Same family of
+mistake as problems 2 and the broker-status check: a check that cannot return the other answer.
+
+**Case 7 diagnosis notes.** My first SQL Monitor query looked only at QC rows (0.01 s, 90 gets —
+the coordinator does almost nothing) and had `OR ... AND` without brackets; summing QC + PX rows per
+`sql_exec_id` showed the real picture. I also repeated the checksum-rounding mistake in
+`wl_results.sql` (fixed the same way as `03_verify.sql`). Root cause: PGA target 446 MB vs ~1.2 GB
+really used → auto target 28 MB → random hash-join spills. Raised target to 1,400 MB (advisor:
+over-allocation 0 from 1,338 MB). Even 4-session serial went 12.4 s → 4.59 s.
