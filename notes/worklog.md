@@ -81,3 +81,16 @@ so the standby caught up (transport/apply lag 0 s), then set
 (archived logs 22 % reclaimable). The FRA now frees applied logs by itself when it needs space.
 Note: with policy `NONE` and no backups, archived logs are never reclaimable — catching up the
 standby alone would not have helped.
+
+## Case 5 — partitioning (branch `case/05-partitioning`)
+
+**Problem 8 — ORA-01418 on the online conversion.** `UPDATE INDEXES (transactions_pk GLOBAL, ...)`
+resolves unqualified index names in the current schema — SYS, because I run as SYSDBA. The statement
+failed at parse time (nothing changed). Fix: `alter session set current_schema = BANK`.
+
+**Problem 9 — a regression I almost missed, and a baseline I did miss.** After partitioning I
+re-ran the other workloads on purpose: the statement query was fine, but the pending query went
+from index to a full scan of the December partition and got slower. I had not re-measured that
+query in the new environment before the change — lesson: baseline every query a change can touch.
+Compared both plans directly (index 3.07 ms vs optimizer's full scan 7.33 ms), then fixed it with a
+covering local index (0.58 ms). Kept the old index INVISIBLE until the workload confirmed the fix.
