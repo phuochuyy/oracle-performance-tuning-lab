@@ -1,0 +1,36 @@
+
+Session altered.
+
+Elapsed: 00:00:00.00
+
+SEG_MB_BEFORE
+-------------
+	   33
+
+Elapsed: 00:00:00.07
+
+REDO_BEFORE
+-----------
+	  0
+
+Elapsed: 00:00:00.01
+
+10980 rows updated.
+
+Elapsed: 00:00:00.28
+
+REDO_AFTER
+----------
+   5450228
+
+Elapsed: 00:00:00.00
+
+SEG_MB_AFTER_UPDATE
+-------------------
+		 33
+
+Elapsed: 00:00:00.08
+
+Rollback complete.
+
+Elapsed: 00:00:00.04

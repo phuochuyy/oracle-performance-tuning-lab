@@ -1,0 +1,6 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+ctdvgu66w4bn4	       0	  1   120174173       117620422      15809766	    15799786		 1 BEGIN bank.wl_year_report('06-compression/1-before', 120); E
+78m521145568x 2559818674	336    357557.6        349961.8 	47052	       47023		30 SELECT /*+ no_parallel */ CHANNEL, TXN_TYPE, COUNT(*) CNT, S
+

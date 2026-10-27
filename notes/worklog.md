@@ -182,3 +182,46 @@ and standby SYNC.
 
 **Problem 14 — `set -e` + `grep -v` on empty output** stopped `set_transport.sh` right after
 disabling FSFO. Another check that could only give one answer — this time the other way round.
+
+## Case 6 — compression (branch `case/06-compression`)
+
+Guessed that after compression the smaller segment would be read through the buffer cache instead
+of direct path — wrong: reads ≈ gets in both runs. The real story was CPU: the report is CPU-bound,
+compression cut blocks read by 57 % but raised CPU per execution by 44 %. Also left a broken draft
+query (ORA-24856, `TO_LOB`) at the top of one of my checks — harmless, but sloppy.
+
+Side finding: `Failed Logon Delay` in AWR → unified audit trail shows 275 failed SYS logons
+(ORA-01031) from the observer host obs-r2 and 5 ORA-01017 from stb3. Parked for the security project.
+
+## Case 8 — ADDM (branch `case/08-addm`)
+
+**Found the real cause of the standby FRA problem on the way.** Before the after-run I checked the
+FRA (rule from case 4) and saw 19 standby logs that RMAN would not delete although apply lag was 0 s:
+they were `APPLIED = 'IN-MEMORY'` — applied in memory, standby datafiles never checkpointed past them,
+because `fast_start_mttr_target = 0`. Setting it to 300 turned them into `APPLIED = YES` within 90 s
+and housekeeping deleted them (stb3 5.9 → 2.3 GB). Documented as F8 in oracle-ha-dr-failover-lab.
+Also checked a second guess on the way: the standby's *average* apply rate (4 MB/s) looked too slow,
+but the *active* rate was 24 MB/s — the average includes idle time.
+
+**ADDM's top actionable finding was a false lead.** Raising the identity sequence cache did not change
+the "Sequence Usage" finding; a control run with the old cache was in between before/after; a direct
+test showed only 4 row-cache refills for 10,000 NEXTVAL (23ai dynamic sequence cache). Without the
+control run I would have claimed +8 %.
+
+**Two false alarms of mine about time.** Twice I thought the housekeeping timer had skipped a run,
+both times because I guessed the current time instead of checking `date`. The timer counts 10 min
+from the last activation, including my manual starts. Check `date` before saying something is late.
+
+## Near miss after case 8 — primary FRA at 99.7 %
+
+The three case-8 runs (before / after / control) generated ~11 GB of redo in ~15 minutes. When I did
+the final health check: prm3 FRA 16,327 / 16,384 MB, stb3 9,754 / 10,240 MB, host disk 13 GB free.
+A full primary FRA means `ORA-00257` (archiver stuck) and the whole database stops. The housekeeping
+timer had run on time, but every 10 minutes is not enough for ~0.7 GB of redo per minute, and I did not
+check the FRA *between* the runs — only before the first one.
+Recovered: housekeeping on stb3 then prm3 → stb3 5.9 GB, prm3 8.8 GB; alert log shows no ORA-00257 /
+ORA-19809, the database never stalled. `fstrim` → host 23 GB free.
+What is left in the primary FRA is mostly flashback logs (38 %, ~6.3 GB, retention target 24 h).
+Lessons: check FRA between heavy runs, not only before the first; for heavy-redo tests run the
+housekeeping between runs; consider a shorter `db_flashback_retention_target` and FRA usage alerting
+→ both belong in oracle-backup-recovery-drills.
