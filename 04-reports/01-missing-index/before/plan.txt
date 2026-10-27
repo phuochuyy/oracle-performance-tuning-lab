@@ -1,0 +1,46 @@
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID 9vdh657tnhgux
+--------------------
+SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+
+Plan hash value: 3308782892
+
+------------------------------------------------------------------------------------------
+| Id  | Operation		   | Name	 | Rows  | Bytes | Cost (%CPU)| Time	 |
+------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	   |		 |	 |	 |     3 (100)| 	 |
+|   1 |  SORT AGGREGATE 	   |		 |     1 |     5 |	      | 	 |
+|   2 |   INDEX FULL SCAN (MIN/MAX)| ACCOUNTS_PK |     1 |     5 |     3   (0)| 00:00:01 |
+------------------------------------------------------------------------------------------
+
+SQL_ID a4hv2brfqt1vf
+--------------------
+SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIONS WHERE
+ACCOUNT_ID = :B1 AND TXN_TS >= TIMESTAMP '2025-10-01 00:00:00' ORDER BY
+TXN_TS DESC FETCH FIRST 50 ROWS ONLY
+
+Plan hash value: 212398583
+
+----------------------------------------------------------------------------------------
+| Id  | Operation		| Name	       | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	|	       |       |       | 25443 (100)|	       |
+|*  1 |  COUNT STOPKEY		|	       |       |       |	    |	       |
+|   2 |   VIEW			|	       |     2 |    72 | 25443	 (1)| 00:00:01 |
+|*  3 |    SORT ORDER BY STOPKEY|	       |     2 |    82 | 25443	 (1)| 00:00:01 |
+|*  4 |     TABLE ACCESS FULL	| TRANSACTIONS |     2 |    82 | 25442	 (1)| 00:00:01 |
+----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter(ROWNUM<=50)
+   3 - filter(ROWNUM<=50)
+   4 - filter(("ACCOUNT_ID"=:B1 AND "TXN_TS">=TIMESTAMP' 2025-10-01
+	      00:00:00.000000000'))
+
+
+40 rows selected.
+

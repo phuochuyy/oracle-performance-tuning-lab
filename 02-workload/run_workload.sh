@@ -28,16 +28,7 @@ sqlplus -s / as sysdba @"$H/05-scripts/awr_report.sql" "$b" "$e" "$out/awr.html"
 sqlplus -s / as sysdba @"$H/05-scripts/top_sql.sql" "$b" "$e" > "$out/top_sql.txt"
 sqlplus -s / as sysdba @"$H/05-scripts/top_events.sql" "$b" "$e" > "$out/top_events.txt"
 sqlplus -s / as sysdba @"$H/05-scripts/wl_summary.sql" PERF "$case/$tag" > "$out/summary.txt"
-sqlplus -s / as sysdba > "$out/plan.txt" <<'SQL'
-set lines 200 pages 200
-alter session set container = PERF;
-select p.plan_table_output
-from (select sql_id, child_number from v$sql
-       where module = 'BANK_APP' and sql_text like 'SELECT TXN_TS%'
-       order by last_active_time desc fetch first 1 rows only) s,
-     table(dbms_xplan.display_cursor(s.sql_id, s.child_number, 'TYPICAL')) p;
-exit
-SQL
+sqlplus -s / as sysdba @"$H/05-scripts/awr_plan.sql" "$b" "$e" > "$out/plan.txt"
 grep -l -E "ORA-|SP2-" "$out"/session_*.log && { echo "session errors, see $out"; exit 1; }
 rm -f "$out"/session_*.log
 echo "AWR snaps $b..$e -> $out"

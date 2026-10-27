@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 222.8	      59.1
+direct path read			 User I/O	     512900	 150.9		40
+enq: KO - fast object checkpoint	 Application		364	    .8		.2
+SQL*Net vector data to client		 Network		899	    .6		.1
+reliable message			 Other			447	    .4		.1
+SQL*Net message to client		 Network	       8540	    .4		.1
+write complete waits			 Configuration		 28	    .2		.1
+log file sync				 Commit 		 50	    .2		 0
+
+8 rows selected.
+
