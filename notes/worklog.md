@@ -34,3 +34,17 @@ when the child is empty → `04_reset.sql` disables the FKs, truncates, re-enabl
 pre-sizing the datafile) would remove that wait; noted for the tuning cases. FRA 4.4 → 5.8 GB,
 well under the new 16 GB limit. `TRANSACTIONS` = 736 MB, about the size of the buffer cache, so
 full scans will do real physical reads.
+
+## Case 1 — missing index (branch `case/01-missing-index`)
+
+**Problem 3 — runner died silently.** `run_workload.sh` used `set -eu` and then sourced
+`~/.bash_profile`; `/etc/bashrc` reads an unset variable (`BASHRCSOURCED`) so `set -u` killed the
+script, and the error was hidden by `2>/dev/null`. Fix: source the profile before `set -eu`.
+
+**Problem 4 — empty execution plan in the baseline evidence.** I committed `plan.txt` with no plan:
+the runner read the plan from `V$SQL` after the run, but the cursor was already gone — shared pool
+had ~81 MB free and even the workload's own INSERT showed `LOADS=3`, i.e. cursors age out quickly
+on this VM. Fix: read plans from AWR (`DBMS_XPLAN.DISPLAY_WORKLOAD_REPOSITORY`) for the snapshot
+range — the first call failed with ORA-01722 because I passed the arguments in the wrong order
+(`format` comes before `dbid`); named parameters fixed it. Regenerated the baseline plan from AWR.
+Lesson: open the evidence files before committing them.

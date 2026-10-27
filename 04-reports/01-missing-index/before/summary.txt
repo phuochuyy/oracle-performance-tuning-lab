@@ -1,0 +1,8 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC
+---------------------------------------- ---------- ---------- ---------- ------------- -------------
+01-missing-index/before 			  4	   608	      120	   5.06 	  1.7
+
