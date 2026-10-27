@@ -2,8 +2,10 @@
 -- then drop the emergency baseline so the optimizer is free again.
 -- usage: sqlplus / as sysdba @fix_stats.sql <pdb_name> '<BEFORE_REGRESS timestamp from regress.sql>'
 whenever sqlerror exit failure
-set verify off lines 200 serveroutput on
+set verify off lines 200
 alter session set container = &1;
+-- must come after the container switch: DBMS_OUTPUT is not enabled in the new container
+set serveroutput on
 exec dbms_stats.restore_table_stats('BANK', 'TRANSACTIONS', as_of_timestamp => to_timestamp_tz('&2', 'YYYY-MM-DD HH24:MI:SS.FF6 TZR'), no_invalidate => false)
 select column_name, num_distinct, histogram from dba_tab_col_statistics
  where owner = 'BANK' and table_name = 'TRANSACTIONS' and column_name = 'STATUS';

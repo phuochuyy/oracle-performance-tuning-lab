@@ -65,5 +65,9 @@ worked. On the way I also wrote two sloppy test queries (ambiguous column `NAME`
 **Result:** good 389/s → regressed 6.85/s → SPM 420/s (stats still bad) → stats restored and
 baseline dropped 373/s.
 
-Open question: `DBMS_OUTPUT` from the baseline-drop block did not print although
-`serveroutput` is on — the count query confirms the drop, but I want to understand why.
+**Problem 7 — `DBMS_OUTPUT` printed nothing** in `fix_stats.sql` although `serveroutput` was on.
+Test: `set serveroutput on` in root → print works; `alter session set container=PERF` → print is
+silent; `set serveroutput on` again → print works. Package state is per container, so DBMS_OUTPUT
+must be enabled after the switch. Moved `set serveroutput on` below the `alter session`.
+(Two failed attempts first: SQL*Plus read `: in` inside `exec` as a bind variable, then my
+single quotes were eaten by the outer `ssh '...'` — wrote the test as a file and copied it.)
