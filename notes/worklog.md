@@ -48,3 +48,22 @@ on this VM. Fix: read plans from AWR (`DBMS_XPLAN.DISPLAY_WORKLOAD_REPOSITORY`) 
 range — the first call failed with ORA-01722 because I passed the arguments in the wrong order
 (`format` comes before `dbid`); named parameters fixed it. Regenerated the baseline plan from AWR.
 Lesson: open the evidence files before committing them.
+
+## Case 2 — plan regression / SPM (branch `case/02-plan-regression-spm`)
+
+**Problem 5 — evidence copied to the wrong folder.** `scp -r host:.../1-good 04-reports/02-.../`
+when the local case folder did not exist yet created the folder and put the *files* in it, not a
+`1-good/` subfolder. My `&&` chain then failed on `git add`, so the regression step did not run
+(good — nothing ran half-done). Moved the files, and added `05-scripts/fetch_reports.sh` that
+always `mkdir -p`s the target first.
+
+**Problem 6 — ORA-13769 loading a plan from AWR inside the PDB.** Snapshots live in CDB$ROOT;
+from the PDB, `DBMS_SPM.LOAD_PLANS_FROM_AWR` searches the PDB's AWR. Passing the CDB `dbid`
+worked. On the way I also wrote two sloppy test queries (ambiguous column `NAME` joining
+`V$DATABASE` and `V$PDBS`; a sub-query as a PL/SQL argument) — fixed before retrying.
+
+**Result:** good 389/s → regressed 6.85/s → SPM 420/s (stats still bad) → stats restored and
+baseline dropped 373/s.
+
+Open question: `DBMS_OUTPUT` from the baseline-drop block did not print although
+`serveroutput` is on — the count query confirms the drop, but I want to understand why.

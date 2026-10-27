@@ -1,0 +1,7 @@
+PL/SQL procedure successfully completed.
+	 N
+----------
+	 1
+SQL_HANDLE	       PLAN_NAME			ENA ACC FIX ORIGIN
+---------------------- -------------------------------- --- --- --- -----------------------------
+SQL_2a321e2111b4df96   SQL_PLAN_2nchy448v9rwqa771cd58	YES YES YES MANUAL-LOAD-FROM-AWR
