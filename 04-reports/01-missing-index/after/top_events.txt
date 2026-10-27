@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 227.8	      64.7
+db file sequential read 		 User I/O	   14567460	  71.1	      20.2
+write complete waits			 Configuration		 28	  34.9	       9.9
+latch: cache buffers lru chain		 Other		      16666	   9.2	       2.6
+latch: cache buffers chains		 Concurrency	       6432	   4.4	       1.2
+cursor: pin S				 Concurrency	       2298	     3		.8
+SQL*Net vector data to client		 Network	       1579	    .3		.1
+latch: shared pool			 Concurrency		 19	    .3		.1
+
+8 rows selected.
+

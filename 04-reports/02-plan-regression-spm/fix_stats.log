@@ -1,0 +1,8 @@
+PL/SQL procedure successfully completed.
+COLUMN_NAME															 NUM_DISTINCT HISTOGRAM
+-------------------------------------------------------------------------------------------------------------------------------- ------------ ---------------
+STATUS																	    3 FREQUENCY
+PL/SQL procedure successfully completed.
+BASELINES_LEFT
+--------------
+	     0

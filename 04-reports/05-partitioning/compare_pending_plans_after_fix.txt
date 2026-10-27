@@ -1,0 +1,6 @@
+warm-up (optimizer choice)	 elapsed .27 ms/exec, cpu .3 ms/exec
+optimizer choice		 elapsed .27 ms/exec, cpu .27 ms/exec
+forced local index		 elapsed .27 ms/exec, cpu .27 ms/exec
+forced full partition scan	 elapsed 8.9 ms/exec, cpu 8.77 ms/exec
+covering index (if present)	 elapsed .27 ms/exec, cpu .23 ms/exec
+PL/SQL procedure successfully completed.

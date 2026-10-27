@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 221.8	      67.3
+db file sequential read 		 User I/O	   13427887	  73.4	      22.3
+latch: cache buffers lru chain		 Other		      16796	  10.5	       3.2
+Failed Logon Delay			 Other			 10	    10		 3
+latch: cache buffers chains		 Concurrency	       5273	     4	       1.2
+cursor: pin S				 Concurrency	       1879	   2.6		.8
+log buffer space			 Configuration		  8	   2.5		.8
+write complete waits			 Configuration		 29	   2.3		.7
+
+8 rows selected.
+

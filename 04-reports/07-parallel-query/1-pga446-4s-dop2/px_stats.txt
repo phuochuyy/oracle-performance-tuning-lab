@@ -1,0 +1,14 @@
+
+STAT_NAME						DELTA
+-------------------------------------------------- ----------
+PX local messages sent				       143228
+Parallel operations downgraded 1 to 25 pct		    0
+Parallel operations downgraded 25 to 50 pct		    0
+Parallel operations downgraded 50 to 75 pct		    0
+Parallel operations downgraded 75 to 99 pct		    0
+Parallel operations downgraded to serial		    0
+Parallel operations not downgraded			   60
+queries parallelized					   58
+
+8 rows selected.
+

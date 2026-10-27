@@ -1,0 +1,7 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+by010kzs43yzc 2565779029	177   2524581.4       1129280.3 	56155	       56281		 9 select /*+ parallel(4) */ b.region, a.product, count(*), sum
+8awp5mgg590jn	       0	  1	2014459 	1129347 	18605		  33		 1 BEGIN bank.wl_annual_dop4('07-parallel-query/2-pga1400-1s-do
+2jcah7xv6a59p 3985291092	117	  281.6 	  159.3 	    0		   0		 1 SELECT /* OPT_DYN_SAMP */ /*+ ALL_ROWS IGNORE_WHERE_CLAUSE R
+
