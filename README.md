@@ -1,7 +1,7 @@
 # Oracle Performance Tuning Lab — AWR · ASH · ADDM · SQL tuning · Partitioning
 
-> Status: **in progress** — 7 of 8 cases done. Every case ends with real before/after numbers and
-> the AWR evidence that proves them. Shared dataset: [BANKDB](01-setup/bankdb/) (8 M transactions).
+> Status: **all 8 cases done**. Every case ends with real before/after numbers and the AWR evidence
+> that proves them. Shared dataset: [BANKDB](01-setup/bankdb/) (8 M transactions).
 
 ## Results so far
 
@@ -14,6 +14,7 @@
 | 5 | [Partitioning](03-cases/05-partitioning/) | monthly report 779.9 ms, 93,426 gets | 81.9 ms, 3,907 gets (pruning) | online interval partitioning; regression found in another query → covering local index (17.0 → 0.58 ms) |
 | 6 | [Compression of historical partitions](03-cases/06-compression/) | 2024 partitions 379 MB; yearly report 357.6 ms | 163 MB (−57 %); report ~30 % **slower** (CPU +44 %), updates 2.35× redo | BASIC compression (EE, no extra license); kept for space, trade-off documented |
 | 7 | [Parallel query / PGA](03-cases/07-parallel-query/) | DOP 2 report 0.50–4.34 s (random TEMP spills), 4 users serial 12.4 s | DOP 2 0.55–0.81 s, 4 users serial 4.59 s / DOP 2 2.34 s | PGA target 446 MB → 1,400 MB (instance really used ~1.2 GB) |
+| 8 | [Checking ADDM's advice](03-cases/08-addm/) | ADDM: "Sequence Usage" 94 % of activity | finding unchanged after the fix; control run ±4 % | not a real problem (23ai dynamic sequence cache, misleading time-model stat) — verify ADDM before acting |
 
 Problems I hit while building this (and how I fixed them): [notes/worklog.md](notes/worklog.md).
 

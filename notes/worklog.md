@@ -192,3 +192,22 @@ query (ORA-24856, `TO_LOB`) at the top of one of my checks — harmless, but slo
 
 Side finding: `Failed Logon Delay` in AWR → unified audit trail shows 275 failed SYS logons
 (ORA-01031) from the observer host obs-r2 and 5 ORA-01017 from stb3. Parked for the security project.
+
+## Case 8 — ADDM (branch `case/08-addm`)
+
+**Found the real cause of the standby FRA problem on the way.** Before the after-run I checked the
+FRA (rule from case 4) and saw 19 standby logs that RMAN would not delete although apply lag was 0 s:
+they were `APPLIED = 'IN-MEMORY'` — applied in memory, standby datafiles never checkpointed past them,
+because `fast_start_mttr_target = 0`. Setting it to 300 turned them into `APPLIED = YES` within 90 s
+and housekeeping deleted them (stb3 5.9 → 2.3 GB). Documented as F8 in oracle-ha-dr-failover-lab.
+Also checked a second guess on the way: the standby's *average* apply rate (4 MB/s) looked too slow,
+but the *active* rate was 24 MB/s — the average includes idle time.
+
+**ADDM's top actionable finding was a false lead.** Raising the identity sequence cache did not change
+the "Sequence Usage" finding; a control run with the old cache was in between before/after; a direct
+test showed only 4 row-cache refills for 10,000 NEXTVAL (23ai dynamic sequence cache). Without the
+control run I would have claimed +8 %.
+
+**Two false alarms of mine about time.** Twice I thought the housekeeping timer had skipped a run,
+both times because I guessed the current time instead of checking `date`. The timer counts 10 min
+from the last activation, including my manual starts. Check `date` before saying something is late.
