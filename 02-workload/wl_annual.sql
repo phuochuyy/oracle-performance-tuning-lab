@@ -6,7 +6,7 @@ whenever sqlerror exit failure
 set verify off
 alter session set container = &1;
 
-create table bank.wl_results (run_tag varchar2(40), dop number, rows_out number, total number, cnt number, elapsed_cs number);
+create table bank.wl_results (run_tag varchar2(100), dop number, rows_out number, total number, cnt number, elapsed_cs number);
 
 create or replace procedure bank.wl_annual(p_tag varchar2, p_seconds number, p_dop pls_integer) is
   l_end   timestamp := systimestamp + numtodsinterval(p_seconds, 'SECOND');

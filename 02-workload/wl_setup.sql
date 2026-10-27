@@ -5,7 +5,7 @@ set verify off
 alter session set container = &1;
 
 create table bank.wl_runs (
-  run_tag       varchar2(40),
+  run_tag       varchar2(100),
   sid           number,
   execs         number,
   rows_fetched  number,
