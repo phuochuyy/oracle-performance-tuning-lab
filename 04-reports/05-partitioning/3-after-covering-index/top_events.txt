@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 232.8	      95.2
+Failed Logon Delay			 Other			 10	    10	       4.1
+write complete waits			 Configuration		 26	    .6		.2
+Disk file operations I/O		 User I/O		656	    .4		.2
+cursor: pin S				 Concurrency		220	    .3		.1
+log file sync				 Commit 		 60	    .2		.1
+cursor: pin S wait on X 		 Concurrency		 13	    .1		.1
+db file sequential read 		 User I/O		359	    .1		 0
+
+8 rows selected.
+

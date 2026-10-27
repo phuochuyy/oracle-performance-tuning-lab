@@ -1,0 +1,16 @@
+Elapsed: 00:00:00.00
+Elapsed: 00:00:00.00
+Table altered.
+Elapsed: 00:02:46.20
+PL/SQL procedure successfully completed.
+Elapsed: 00:00:17.75
+PARTITIONS   MIN_ROWS	MAX_ROWS
+---------- ---------- ----------
+	25	    0	  344129
+Elapsed: 00:00:00.04
+INDEX_NAME															 PAR STATUS
+-------------------------------------------------------------------------------------------------------------------------------- --- --------
+TRANSACTIONS_ACCT_TS_IX 													 YES N/A
+TRANSACTIONS_STATUS_TS_IX													 YES N/A
+TRANSACTIONS_PK 														 NO  VALID
+Elapsed: 00:00:00.02

@@ -1,0 +1,6 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+96hss7mmwd280	       0	  4   119253989      57383353.3       5970438		   7		 1 BEGIN bank.wl_pending('05-partitioning/3-after-covering-inde
+8wx3gpt1vwa72 1299576448     807912	  575.7 	  274.7 	   30		   0		 1 SELECT COUNT(*), SUM(AMOUNT) FROM BANK.TRANSACTIONS WHERE ST
+

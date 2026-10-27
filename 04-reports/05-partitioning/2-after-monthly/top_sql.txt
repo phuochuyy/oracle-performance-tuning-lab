@@ -1,0 +1,7 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+1bpfvsqdnttyy	       0	  4   120045124        56031761       5639206	     3157352		 1 BEGIN bank.wl_monthly('05-partitioning/2-after-monthly', 120
+0asu682bpqmqq 3410498840       5846	81881.3 	38152.2 	 3907		2226		 5 SELECT CHANNEL, COUNT(*) CNT, SUM(AMOUNT) TOTAL FROM BANK.TR
+b0n85wg1szftr	       0	  4	 9769.5 	   2355 	   17		   2		 1 INSERT INTO BANK.WL_RUNS VALUES (:B4 , SYS_CONTEXT('userenv'
+
