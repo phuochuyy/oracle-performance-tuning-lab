@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 146.3	      37.7
+log file switch completion		 Configuration		 90	  78.9	      20.3
+db file parallel read			 User I/O	      82094	  62.1		16
+log buffer space			 Configuration		129	  28.2	       7.3
+buffer busy waits			 Concurrency	      35279	  25.8	       6.7
+library cache: mutex X			 Concurrency	       3700	  11.6		 3
+Failed Logon Delay			 Other			 10	    10	       2.6
+db file scattered read			 User I/O	       9816	     7	       1.8
+
+8 rows selected.
+

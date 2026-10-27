@@ -1,0 +1,387 @@
+
+PL/SQL procedure successfully completed.
+
+	  ADDM Report for Task 'ADDM_CASE8_CONTROL'
+	  -----------------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 107 to 108.
+Time period starts at 28-OCT-26 12.52.03 AM
+Time period ends at 28-OCT-26 12.54.03 AM
+
+Analysis Target
+---------------
+Database 'ORCL3' with DB ID 1178619591.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance ORCL3,
+numbered 1 and hosted at prm3.rac.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 502 seconds.
+The average number of active sessions was 4.19.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3122828995   PERF	      2 	 3.98		   95.9%
+4153754668   GGREPL	      2 	 .12		   2.89%
+Average of all 3 containers:  2 	 1.38		   33.33%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3122828995  PERF	    2	       1.99		  3.98
+4153754668  GGREPL	    2	       .06		  .12
+
+Summary of Findings
+-------------------
+   Description				 Active Sessions      Recommendations
+					 Percent of Activity
+   ------------------------------------  -------------------  ---------------
+1  Large number of database connections  4.19 | 100	      1
+2  Sequence Usage			 3.91 | 93.29	      1
+3  Top SQL Statements			 3.74 | 89.36	      4
+4  "User I/O" wait Class		 .98 | 23.42	      0
+5  Log File Switches			 .4 | 9.55	      2
+6  Buffer Busy				 .28 | 6.7	      0
+7  Undersized Redo Log Buffer		 .15 | 3.63	      2
+8  Shared Pool Latches			 .12 | 2.76	      0
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Large number of database connections
+Impact is 4.15 active sessions, 100% of total activity.
+-------------------------------------------------------
+A large number of sessions connected to the database instance were detected.
+It can cause CPU oversubscription and consequently a severe degredation in
+database performance and stability.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 4.19 active sessions, 100% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Reduce the number of sessions connected to the database instance. The
+      number of connections to the database instance should not exceed ten
+      times the number of CPU cores available to the database instance. It
+      should also not exceed ten times the CPU limit assigned by the resource
+      manager.
+   Rationale
+      There were 128 sessions connected to the database instance during the
+      analysis period. This is a large number compared to the 2 CPU cores
+      available to the database instance.
+
+
+Finding 2: Sequence Usage
+Impact is 3.87 active sessions, 93.29% of total activity.
+---------------------------------------------------------
+Sequence cache misses were consuming significant database time.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 3.91 active sessions, 93.29% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate application or look at top SQL to find hot sequences. Use a
+      larger cache size for those sequences. Try avoiding the use of the ORDER
+      setting if running RAC.
+
+
+Finding 3: Top SQL Statements
+Impact is 3.71 active sessions, 89.36% of total activity.
+---------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is 1.43 active sessions, 34.04% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate the UPDATE statement with SQL_ID "ck8pmcu0z92cb" for
+      possible performance improvements. You can supplement the information
+      given here with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID ck8pmcu0z92cb.
+	 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE - :B2 WHERE ACCOUNT_ID =
+	 :B1
+   Rationale
+      The SQL statement executed in container PERF with database ID
+      3122828995.
+   Rationale
+      The SQL spent only 25% of its database time on CPU, I/O and Cluster
+      waits. Therefore, the SQL Tuning Advisor is not applicable in this case.
+      Look at performance data for the SQL to find potential improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "ck8pmcu0z92cb" was executed 1973004 times and
+      had an average elapsed time of 0.000071 seconds.
+   Rationale
+      Waiting for event "log file switch completion" in wait class
+      "Configuration" accounted for 50% of the database time spent in
+      processing the SQL statement with SQL_ID "ck8pmcu0z92cb".
+   Rationale
+      Top level calls to execute the PL/SQL statement with SQL_ID
+      "2apf0n95cx7up" are responsible for 100% of the database time spent on
+      the UPDATE statement with SQL_ID "ck8pmcu0z92cb".
+      Related Object
+	 SQL statement with SQL_ID 2apf0n95cx7up.
+	 BEGIN bank.wl_transfer('08-addm/3-control-cache20', 120); END;
+
+   Recommendation 2: SQL Tuning
+   Estimated benefit is 1.07 active sessions, 25.53% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate the PL/SQL statement with SQL_ID "2apf0n95cx7up" for
+      possible performance improvements. You can supplement the information
+      given here with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID 2apf0n95cx7up.
+	 BEGIN bank.wl_transfer('08-addm/3-control-cache20', 120); END;
+   Rationale
+      The SQL statement executed in container PERF with database ID
+      3122828995.
+   Rationale
+      The SQL Tuning Advisor cannot operate on PL/SQL statements.
+   Rationale
+      Database time for this SQL was divided as follows: 67% for SQL
+      execution, 0% for parsing, 33% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "2apf0n95cx7up" was executed 4 times and had
+      an average elapsed time of 120 seconds.
+
+   Recommendation 3: SQL Tuning
+   Estimated benefit is .8 active sessions, 19.15% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Run SQL Tuning Advisor on the INSERT statement with SQL_ID
+      "f3jggcu1ud4g9". Additionally, investigate this statement for possible
+      performance improvements. You can supplement the information given here
+      with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID f3jggcu1ud4g9.
+	 INSERT INTO BANK.TRANSFER_LOG (FROM_ACCT, TO_ACCT, AMOUNT) VALUES
+	 (:B3 , :B2 , :B1 )
+   Rationale
+      The SQL statement executed in container PERF with database ID
+      3122828995.
+   Rationale
+      The SQL spent 55% of its database time on CPU, I/O and Cluster waits.
+      This part of database time may be improved by the SQL Tuning Advisor.
+      Look at data given below and an ASH report for further performance
+      improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "f3jggcu1ud4g9" was executed 1973398 times and
+      had an average elapsed time of 0.000075 seconds.
+   Rationale
+      Top level calls to execute the PL/SQL statement with SQL_ID
+      "2apf0n95cx7up" are responsible for 100% of the database time spent on
+      the INSERT statement with SQL_ID "f3jggcu1ud4g9".
+      Related Object
+	 SQL statement with SQL_ID 2apf0n95cx7up.
+	 BEGIN bank.wl_transfer('08-addm/3-control-cache20', 120); END;
+
+   Recommendation 4: SQL Tuning
+   Estimated benefit is .45 active sessions, 10.64% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Run SQL Tuning Advisor on the UPDATE statement with SQL_ID
+      "1b62d9m3rpg0a". Additionally, investigate this statement for possible
+      performance improvements. You can supplement the information given here
+      with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID 1b62d9m3rpg0a.
+	 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE + :B2 WHERE ACCOUNT_ID =
+	 :B1
+   Rationale
+      The SQL statement executed in container PERF with database ID
+      3122828995.
+   Rationale
+      The SQL spent 60% of its database time on CPU, I/O and Cluster waits.
+      This part of database time may be improved by the SQL Tuning Advisor.
+      Look at data given below and an ASH report for further performance
+      improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "1b62d9m3rpg0a" was executed 1973325 times and
+      had an average elapsed time of 0.000037 seconds.
+   Rationale
+      Top level calls to execute the PL/SQL statement with SQL_ID
+      "2apf0n95cx7up" are responsible for 100% of the database time spent on
+      the UPDATE statement with SQL_ID "1b62d9m3rpg0a".
+      Related Object
+	 SQL statement with SQL_ID 2apf0n95cx7up.
+	 BEGIN bank.wl_transfer('08-addm/3-control-cache20', 120); END;
+
+
+Finding 4: "User I/O" wait Class
+Impact is .97 active sessions, 23.42% of total activity.
+--------------------------------------------------------
+Wait class "User I/O" was consuming significant database time.
+Waits for I/O to temporary tablespaces were not consuming significant database
+time.
+The throughput of the I/O subsystem was not significantly lower than expected.
+
+   No recommendations are available.
+
+
+Finding 5: Log File Switches
+Impact is .4 active sessions, 9.55% of total activity.
+------------------------------------------------------
+Log file switch operations were consuming significant database time while
+waiting for checkpoint completion.
+This problem can be caused by use of hot backup mode on tablespaces.
+DML to tablespaces in hot backup mode causes generation of additional redo.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec    Percent
+				CPUs		     of Total
+  -----------  ---------------	---------  --------  --------
+  3122828995   PERF		2	   29874.03  99.73%
+  1178619591   CDB$ROOT 	2	   78.63     .26%
+  4153754668   GGREPL		2	   3.76      .01%
+  Average of all 3 containers:	2	   9985.43   33.33%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  --------
+  3122828995  PERF	      2 	 14937.01	    29874.02
+  1178619591  CDB$ROOT	      2 	 39.32		    78.64
+  4153754668  GGREPL	      2 	 1.88		    3.76
+
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is .4 active sessions, 9.55% of total activity.
+   -----------------------------------------------------------------
+   Action
+      Verify whether incremental shipping was used for standby databases.
+
+   Recommendation 2: Database Configuration
+   Estimated benefit is .4 active sessions, 9.55% of total activity.
+   -----------------------------------------------------------------
+   Action
+      Increase the size of the log files to 2048 M to hold at least 20 minutes
+      of redo information.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Configuration" was consuming significant database time.
+      Impact is .63 active sessions, 15.14% of total activity.
+
+
+Finding 6: Buffer Busy
+Impact is .28 active sessions, 6.7% of total activity.
+------------------------------------------------------
+Read and write contention on database blocks was consuming significant
+database time.
+There were no hot blocks for "buffer busy" wait events during the analysis
+period.
+There were no hot objects for "buffer busy" wait events during the analysis
+period.
+
+   No recommendations are available.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Concurrency" was consuming significant database time.
+      Impact is .4 active sessions, 9.62% of total activity.
+
+
+Finding 7: Undersized Redo Log Buffer
+Impact is .15 active sessions, 3.63% of total activity.
+-------------------------------------------------------
+Waits for redo log buffer space were consuming significant database time.
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is .15 active sessions, 3.63% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Increase the size of the redo log buffer by setting the value of
+      parameter "log_buffer" to 32 M.
+   Rationale
+      The value of parameter "log_buffer" was "8486912" during the analysis
+      period.
+
+   Recommendation 2: Host Configuration
+   Estimated benefit is .15 active sessions, 3.63% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Investigate the possibility of improving the performance of I/O to the
+      online redo log files.
+   Rationale
+      The average size of writes to the online redo log files was 299 K and
+      the average time per write was 6 milliseconds.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Configuration" was consuming significant database time.
+      Impact is .63 active sessions, 15.14% of total activity.
+
+
+Finding 8: Shared Pool Latches
+Impact is .11 active sessions, 2.76% of total activity.
+-------------------------------------------------------
+Contention for latches related to the shared pool was consuming significant
+database time.
+Waits for "library cache: mutex X" amounted to 2% of database time.
+
+   No recommendations are available.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Concurrency" was consuming significant database time.
+      Impact is .4 active sessions, 9.62% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+Wait class "Commit" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
+The database's maintenance windows were active during 100% of the analysis
+period.
+
+
+
