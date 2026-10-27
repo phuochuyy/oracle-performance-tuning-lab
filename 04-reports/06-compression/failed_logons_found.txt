@@ -1,0 +1,9 @@
+
+    CON_ID DBUSERNAME	  OS_USERNAME  USERHOST       CLIENT_PROGRAM_NAME	   RETURN_CODE	 ATTEMPTS FIRST LAST
+---------- -------------- ------------ -------------- ---------------------------- ----------- ---------- ----- -----
+	 1 SYS		  oracle							  1031	      278 23:42 00:41
+	 1 SYS		  oracle       obs-r2.rac     dgmgrl@obs-r2.rac (TNS V1-V3	  1031	      278 23:42 00:41
+						      )
+
+	 1		  oracle       stb3.rac       oracle@stb3.rac (TNS V1-V3)	  1017		5 23:40 00:03
+
