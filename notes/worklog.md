@@ -71,3 +71,13 @@ silent; `set serveroutput on` again → print works. Package state is per contai
 must be enabled after the switch. Moved `set serveroutput on` below the `alter session`.
 (Two failed attempts first: SQL*Plus read `: in` inside `exec` as a bind variable, then my
 single quotes were eaten by the outer `ssh '...'` — wrote the test as a file and copied it.)
+
+## FRA housekeeping before case 5
+
+FRA on orcl3 reached 7.4 / 16 GB with only 55 MB reclaimable: the standby `ORCL3_STB` had been
+down for days and `ARCHIVELOG DELETION POLICY` was `NONE`. Started Region B again (`labctl.sh dg-b`)
+so the standby caught up (transport/apply lag 0 s), then set
+`CONFIGURE ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY`. Reclaimable went 55 MB → 3,755 MB
+(archived logs 22 % reclaimable). The FRA now frees applied logs by itself when it needs space.
+Note: with policy `NONE` and no backups, archived logs are never reclaimable — catching up the
+standby alone would not have helped.
