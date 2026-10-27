@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 237.2	      90.4
+direct path read			 User I/O	      59945	  11.9	       4.5
+Failed Logon Delay			 Other			 10	    10	       3.8
+direct path write temp			 User I/O		132	    .8		.3
+enq: CR - block range reuse ckpt	 Other			  3	    .6		.2
+Disk file operations I/O		 User I/O		672	    .4		.2
+log file sync				 Commit 		 65	    .3		.1
+write complete waits			 Configuration		 28	    .3		.1
+
+8 rows selected.
+

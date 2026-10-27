@@ -1,0 +1,8 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+0ymugpu2gntc1	       0	  1   121547933       120606852       3655008	     3076364		 1 BEGIN bank.wl_annual_serial('07-parallel-query/2-pga1400-1s-
+c8kyw8pz8jf1k 2189913597	 66   1840473.3       1826237.5 	55348	       46612		 9 select /*+ no_parallel */ b.region, a.product, count(*), sum
+5h3t07agdqsr7	       0	 66	  588.7 	  580.9 	   16		   0		 1 INSERT INTO BANK.WL_RESULTS VALUES (:B6 , :B5 , :B4 , :B3 ,
+2jcah7xv6a59p 3985291092	 52	  167.6 	  164.7 	    0		   0		 1 SELECT /* OPT_DYN_SAMP */ /*+ ALL_ROWS IGNORE_WHERE_CLAUSE R
+

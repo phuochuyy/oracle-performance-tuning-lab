@@ -1,0 +1,46 @@
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID c8kyw8pz8jf1k
+--------------------
+select /*+ no_parallel */ b.region, a.product, count(*), sum(t.amount)
+from bank.transactions t join bank.accounts a on a.account_id =
+t.account_id join bank.customers c on c.customer_id = a.customer_id
+join bank.branches b on b.branch_id = c.branch_id where t.txn_ts >=
+timestamp '2025-01-01 00:00:00' and t.txn_ts < timestamp '2026-01-01
+00:00:00' and t.status = 'POSTED' group by b.region, a.product
+
+Plan hash value: 2189913597
+
+--------------------------------------------------------------------------------------------------------------------
+| Id  | Operation		    | Name	   | Rows  | Bytes |TempSpc| Cost (%CPU)| Time	   | Pstart| Pstop |
+--------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	    |		   |	   |	   |	   | 24596 (100)|	   |	   |	   |
+|   1 |  HASH GROUP BY		    |		   |	 7 |   420 |	   | 24596   (1)| 00:00:01 |	   |	   |
+|*  2 |   HASH JOIN		    |		   |  3777K|   216M|	   | 24517   (1)| 00:00:01 |	   |	   |
+|   3 |    TABLE ACCESS FULL	    | BRANCHES	   |   100 |  1000 |	   |	 5   (0)| 00:00:01 |	   |	   |
+|*  4 |    HASH JOIN		    |		   |  3777K|   180M|	14M| 24504   (1)| 00:00:01 |	   |	   |
+|   5 |     VIEW		    | VW_GBF_16    |   474K|  9729K|	   |  3356   (1)| 00:00:01 |	   |	   |
+|*  6 |      HASH JOIN		    |		   |   474K|	11M|  6256K|  3356   (1)| 00:00:01 |	   |	   |
+|   7 |       TABLE ACCESS FULL     | CUSTOMERS    |   320K|  2500K|	   |  1298   (1)| 00:00:01 |	   |	   |
+|   8 |       TABLE ACCESS FULL     | ACCOUNTS	   |   480K|  7968K|	   |  1094   (1)| 00:00:01 |	   |	   |
+|   9 |     PARTITION RANGE ITERATOR|		   |  3869K|   107M|	   | 12891   (1)| 00:00:01 |	14 |	25 |
+|* 10 |      TABLE ACCESS FULL	    | TRANSACTIONS |  3869K|   107M|	   | 12891   (1)| 00:00:01 |	14 |	25 |
+--------------------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("B"."BRANCH_ID"="ITEM_2")
+   4 - access("ITEM_1"="T"."ACCOUNT_ID")
+   6 - access("C"."CUSTOMER_ID"="A"."CUSTOMER_ID")
+  10 - filter("T"."STATUS"='POSTED')
+
+Note
+-----
+   - Degree of Parallelism is 1 because of hint
+   - this is an adaptive plan
+
+
+40 rows selected.
+
