@@ -1,0 +1,31 @@
+== commit and write latency (foreground + background events)
+
+EVENT						WAITS	  AVG_MS    TOTAL_S
+------------------------------------------ ---------- ---------- ----------
+write complete waits				   26	 9985.89      259.6
+free buffer waits				18026	   11.89      214.3
+log file switch (checkpoint incomplete) 	   32	 4729.36      151.3
+log file parallel write 			 2234	   18.31       40.9
+log buffer space				  168	  193.62       32.5
+log file sync					   64	  166.59       10.7
+SYNC Remote Write				 2313	    3.76	8.7
+LGWR wait for redo copy 			  614	    1.24	 .8
+
+8 rows selected.
+
+== volume
+
+STAT_NAME			      DELTA
+-------------------------------- ----------
+DBWR checkpoints			  9
+physical writes 		      59404
+redo log space requests 	       1699
+redo size			 1609465904
+user commits			     851246
+
+== log switches in the interval
+
+LOG_SWITCHES
+------------
+	   8
+
