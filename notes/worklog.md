@@ -94,3 +94,30 @@ from index to a full scan of the December partition and got slower. I had not re
 query in the new environment before the change — lesson: baseline every query a change can touch.
 Compared both plans directly (index 3.07 ms vs optimizer's full scan 7.33 ms), then fixed it with a
 covering local index (0.58 ms). Kept the old index INVISIBLE until the workload confirmed the fix.
+
+## Incident after case 5 — standby FRA full, FSFO unsynchronized
+
+**Symptom:** Region B broker status `ERROR` — `ORA-16857 member disconnected from redo source`,
+`ORA-16817 unsynchronized fast-start failover configuration`. Standby alert log:
+`ORA-19809: limit exceeded for recovery files` (stb3 FRA 10,226 / 10,240 MB, 0 reclaimable).
+**Cause:** the online partition conversion generated several GB of redo (FORCE LOGGING), and the
+standby also had `ARCHIVELOG DELETION POLICY NONE`, so applied logs were never freed.
+**Impact:** while it lasted, a failover would not have been zero data loss.
+**Fix:** on stb3 `CONFIGURE ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY` +
+`DELETE ARCHIVELOG ALL` (only applied logs are deleted) → 10.2 GB → 2.0 GB; transport reconnected by
+itself and the configuration returned to SUCCESS, FSFO target valid again. On prm3 deleted logs
+already applied on the standby (logs not yet applied were kept: RMAN-08120), FRA 12.9 → 5.3 GB.
+Then `fstrim -a` in prm3 and stb3 (disks use discard=unmap): host free space 23 → 31 GB.
+
+**My mistake while checking:** my wait loop grepped `^SUCCESS` over the output of
+`show configuration` + `show database` and stopped on the *database* status line while the
+*configuration* was still ERROR. Fixed by grepping only the line after `Configuration Status:`.
+Second time today a check of mine passed for the wrong reason.
+
+**Not done on purpose:** `BANK_DATA` has 1.7 GB free inside a 3.3 GB datafile (old table copy),
+but the high-water mark is at the end of the file (ORA-03297 on resize). 23ai
+`DBMS_SPACE.SHRINK_TABLESPACE` (analyze mode) would move 76 objects / 1.4 GB to reach 1.78 GB — that
+move would itself generate ~1.4 GB of redo on both sites under FORCE LOGGING. No real gain now; left
+as is.
+
+**Before the next big change:** check FRA on the primary *and* the standby.
