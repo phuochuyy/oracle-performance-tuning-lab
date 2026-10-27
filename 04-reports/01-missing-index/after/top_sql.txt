@@ -1,0 +1,7 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+0qbd55v14sg6m	       0	  4   119279050      55292898.3      11099665	     3644499		 1 BEGIN bank.wl_statement('01-missing-index/after', 120); END;
+a4hv2brfqt1vf 1121716283    8966552	   38.9 	   17.8 	    5		   2	       1.9 SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIO
+9vdh657tnhgux 3308782892	  4	35481.3 	   8854 	  313		   2		 1 SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+

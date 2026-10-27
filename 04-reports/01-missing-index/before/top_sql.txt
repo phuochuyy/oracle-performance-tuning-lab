@@ -1,8 +1,8 @@
 
-SQL_ID		     PHV      EXECS MS_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
-------------- ---------- ---------- ----------- ------------- -------------- ------------- ------------------------------------------------------------
-6upmjrstdb8rw	       0	  4	 120226      28179520	    14101379		 1 BEGIN bank.wl_statement('01-missing-index/before', 120); END
-a4hv2brfqt1vf  212398583	608	  787.8        186670	       93259	       1.7 SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIO
-9vdh657tnhgux 3308782892	  4	     31 	  204		   0		 1 SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
-b0n85wg1szftr	       0	  4	   11.8 	   54		   0		 1 INSERT INTO BANK.WL_RUNS VALUES (:B4 , SYS_CONTEXT('userenv'
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+6upmjrstdb8rw	       0	  4   120226006        54498003      28179520	    14101379		 1 BEGIN bank.wl_statement('01-missing-index/before', 120); END
+a4hv2brfqt1vf  212398583	608    787756.8        357003.2        186670	       93259	       1.7 SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIO
+9vdh657tnhgux 3308782892	  4	30979.5 	 7767.5 	  204		   0		 1 SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+b0n85wg1szftr	       0	  4	11842.5 	 5536.5 	   54		   0		 1 INSERT INTO BANK.WL_RUNS VALUES (:B4 , SYS_CONTEXT('userenv'
 
