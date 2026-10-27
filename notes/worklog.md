@@ -153,3 +153,16 @@ incident; ASH alone is not enough.
 **Found on the way (for case 4):** baseline spends 65 % of DB time in `write complete waits`;
 redo groups stay ACTIVE; `filesystemio_options = none`, 1 DB writer. And PL/SQL commits inside a
 loop do not wait for `log file sync`, so commit latency must be measured from a client.
+
+## FRA check after case 3 — archived logs not reclaimable (open question)
+
+After ~2.2 M transfers, FRA was prm3 12.0 / 16 GB and stb3 8.0 / 10 GB, with only ~3 % of archived
+logs reclaimable — although `ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY` was set on both
+and the logs were applied on the standby (`V$ARCHIVED_LOG` dest 2 `APPLIED = YES`).
+`RMAN DELETE ARCHIVELOG ALL` then deleted 31 logs on prm3 and 25 on stb3 without warnings (kept only
+logs not yet applied, RMAN-08120); GoldenGate was not holding them (capture `REQUIRED_CHECKPOINT_SCN`
+recent, no RMAN-08137). FRA after: prm3 7.0 GB, stb3 4.2 GB.
+So RMAN considered the logs deletable while the FRA did not count them as reclaimable. Not
+explained yet (one guess: logs kept for Flashback Database within the 24 h retention target —
+unconfirmed). Practical answer for now: a policy-respecting `DELETE ARCHIVELOG ALL` job on both
+sites → to be built properly in oracle-backup-recovery-drills.
