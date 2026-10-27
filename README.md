@@ -1,6 +1,6 @@
 # Oracle Performance Tuning Lab — AWR · ASH · ADDM · SQL tuning · Partitioning
 
-> Status: **in progress** — 4 of 8 cases done. Every case ends with real before/after numbers and
+> Status: **in progress** — 5 of 8 cases done. Every case ends with real before/after numbers and
 > the AWR evidence that proves them. Shared dataset: [BANKDB](01-setup/bankdb/) (8 M transactions).
 
 ## Results so far
@@ -9,6 +9,7 @@
 |---|------|--------|-------|-----|
 | 1 | [Missing index](03-cases/01-missing-index/) | 787.8 ms/exec, 186,670 gets, full scan | 0.039 ms/exec, 5 gets | composite index `(account_id, txn_ts)`, no sort |
 | 2 | [Plan regression after stats refresh](03-cases/02-plan-regression-spm/) | 10.3 ms → **583.6 ms** after histograms were dropped | 9.5 ms with SPM, 10.7 ms after stats restore | SPM baseline from AWR, then `RESTORE_TABLE_STATS` |
+| 3 | [Row lock contention](03-cases/03-row-lock-contention/) | transfers 4,100/s during the interest batch, `enq: TX` 41.9 % | 6,535/s (baseline 6,619/s), no `enq: TX` | blocker found with live blocking tree + ASH; batch commits every 100 rows |
 | 5 | [Partitioning](03-cases/05-partitioning/) | monthly report 779.9 ms, 93,426 gets | 81.9 ms, 3,907 gets (pruning) | online interval partitioning; regression found in another query → covering local index (17.0 → 0.58 ms) |
 | 7 | [Parallel query / PGA](03-cases/07-parallel-query/) | DOP 2 report 0.50–4.34 s (random TEMP spills), 4 users serial 12.4 s | DOP 2 0.55–0.81 s, 4 users serial 4.59 s / DOP 2 2.34 s | PGA target 446 MB → 1,400 MB (instance really used ~1.2 GB) |
 

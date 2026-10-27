@@ -1,0 +1,25 @@
+== DB time by event (samples ~ seconds)
+
+EVENT					SAMPLES        PCT
+------------------------------------ ---------- ----------
+log file switch (checkpoint incomple	    214       39.9
+te)
+
+ON CPU					    143       26.7
+free buffer waits			     45        8.4
+log buffer space			     34        6.3
+db file scattered read			     16 	 3
+buffer busy waits			     16 	 3
+write complete waits			     16 	 3
+log file switch completion		     15        2.8
+
+8 rows selected.
+
+== Lock waits by blocking session
+
+   BLK_SID BLK_SERIAL WAIT_SAMPLES WAITING_SESSIONS BLK_MODULE							     BLK_ACTION 						      BLK_STAT
+---------- ---------- ------------ ---------------- ---------------------------------------------------------------- ---------------------------------------------------------------- --------
+	99	12359		 3		  3
+	97	46004		 3		  3
+       312	49338		 1		  1
+

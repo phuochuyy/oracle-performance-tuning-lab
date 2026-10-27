@@ -1,0 +1,24 @@
+== DB time by event (samples ~ seconds)
+
+EVENT					SAMPLES        PCT
+------------------------------------ ---------- ----------
+log file switch (checkpoint incomple	    167       25.6
+te)
+
+ON CPU					    131       20.1
+enq: HW - contention			     87       13.3
+free buffer waits			     65 	10
+buffer busy waits			     50        7.7
+enq: TX - contention			     30        4.6
+DLM cross inst call completion		     29        4.4
+local write wait			     29        4.4
+
+8 rows selected.
+
+== Lock waits by blocking session
+
+   BLK_SID BLK_SERIAL WAIT_SAMPLES WAITING_SESSIONS BLK_MODULE							     BLK_ACTION 						      BLK_STAT
+---------- ---------- ------------ ---------------- ---------------------------------------------------------------- ---------------------------------------------------------------- --------
+	61	 9146		30		  1 MMON_SLAVE							     Auto ADDM Slave Action					      ACTIVE
+	90	 4819		 1		  1
+
