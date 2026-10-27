@@ -3,7 +3,7 @@
 > Status: **all 8 cases done**. Every case ends with real before/after numbers and the AWR evidence
 > that proves them. Shared dataset: [BANKDB](01-setup/bankdb/) (8 M transactions).
 
-## Results so far
+## Results
 
 | # | Case | Before | After | Fix |
 |---|------|--------|-------|-----|

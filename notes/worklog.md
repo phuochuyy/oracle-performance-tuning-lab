@@ -211,3 +211,17 @@ control run I would have claimed +8 %.
 **Two false alarms of mine about time.** Twice I thought the housekeeping timer had skipped a run,
 both times because I guessed the current time instead of checking `date`. The timer counts 10 min
 from the last activation, including my manual starts. Check `date` before saying something is late.
+
+## Near miss after case 8 — primary FRA at 99.7 %
+
+The three case-8 runs (before / after / control) generated ~11 GB of redo in ~15 minutes. When I did
+the final health check: prm3 FRA 16,327 / 16,384 MB, stb3 9,754 / 10,240 MB, host disk 13 GB free.
+A full primary FRA means `ORA-00257` (archiver stuck) and the whole database stops. The housekeeping
+timer had run on time, but every 10 minutes is not enough for ~0.7 GB of redo per minute, and I did not
+check the FRA *between* the runs — only before the first one.
+Recovered: housekeeping on stb3 then prm3 → stb3 5.9 GB, prm3 8.8 GB; alert log shows no ORA-00257 /
+ORA-19809, the database never stalled. `fstrim` → host 23 GB free.
+What is left in the primary FRA is mostly flashback logs (38 %, ~6.3 GB, retention target 24 h).
+Lessons: check FRA between heavy runs, not only before the first; for heavy-redo tests run the
+housekeeping between runs; consider a shorter `db_flashback_retention_target` and FRA usage alerting
+→ both belong in oracle-backup-recovery-drills.
