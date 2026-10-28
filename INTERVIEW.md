@@ -13,7 +13,8 @@ Three results I like to talk about:
   the baseline so the optimizer was free again.
 - Parallel queries were **randomly 8× slower**. SQL Monitor per plan line showed the hash join got
   3.4 MB of memory instead of 34 MB and spilled to TEMP; the instance really used ~1.2 GB of PGA against
-  a 446 MB target. Sizing PGA from the advisor fixed it — even serial runs got 2.7× faster.
+  a 446 MB target. Sizing PGA from the advisor fixed it — with 4 concurrent users even the serial
+  report got 2.7× faster (12.4 → 4.59 s; a single serial session only 2.07 → 1.84 s).
 - **ADDM's top finding was wrong.** It blamed sequence cache misses for 94 % of DB time; a control run
   and a direct test showed 23ai's dynamic sequence cache made it a non-issue. I learned to treat ADDM as
   leads, not a to-do list.
