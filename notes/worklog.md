@@ -225,3 +225,16 @@ What is left in the primary FRA is mostly flashback logs (38 %, ~6.3 GB, retenti
 Lessons: check FRA between heavy runs, not only before the first; for heavy-redo tests run the
 housekeeping between runs; consider a shorter `db_flashback_retention_target` and FRA usage alerting
 → both belong in oracle-backup-recovery-drills.
+
+## Found later: workload procedures invalid after case 3 (branch `fix/workload-insert-columns`)
+
+- The Ansible health check of the automation lab reported 7 invalid objects in PERF: `WL_STATEMENT`,
+  `WL_PENDING`, `WL_MONTHLY`, `WL_ANNUAL*`. `UTL_RECOMP` did not help; `ALTER PROCEDURE ... COMPILE` →
+  `ORA-00947: not enough values`. Case 3's `wl_transfer.sql` adds `WL_RUNS.ERRORS`, and the older
+  procedures inserted into `WL_RUNS` by position (6 values). The measured results were not affected (those
+  runs happened before the column was added), but the workload of cases 1, 2, 5, 6, 7 could not be re-run.
+- Fix: every INSERT into `WL_RUNS` / `WL_RESULTS` names its columns; procedures re-created in PERF, all 11
+  valid, `wl_monthly` smoke-tested (47 executions in 3 s, test row removed).
+- My own slip while re-creating them: a `sed` range meant to skip the one-line `create table` also ate the
+  start of the next procedure (a range end is only searched from the next line) — the script stopped on
+  the compile error; re-run with a plain `grep -v` of that line.
