@@ -59,3 +59,14 @@ Evidence: [after/](../../04-reports/01-missing-index/after/).
   absolute throughput would be lower on real disks.
 - After the fix `write complete waits` showed up (10 % of DB time). Not investigated yet.
 - AWR/ASH need the Diagnostics Pack license outside a lab.
+
+## Live demo (re-runnable)
+
+[`demo_reset.sql`](demo_reset.sql) drops the index again, so the case can be shown live:
+`demo_reset.sql` → `run_workload.sh ... before` → `fix.sql` → `run_workload.sh ... after`; it ends in
+the same state (index present). Dry run 2026-10-29, 4 sessions: **77.0 ms → 0.029 ms per execution,
+11,643 → 5 gets** — not the original 787.8 ms / 186,670 gets, because `TRANSACTIONS` has been
+interval-partitioned since case 5 (partition pruning on `txn_ts` already cuts the full scan). The plan
+change (full scan → index range scan) is the point. In the first dry run AWR had no BANK SQL at all for the
+"before" snapshot pair (`DBA_HIST_SQLSTAT` empty for that interval, no snapshot error); a second run captured
+it normally — if `top_sql.txt` is empty, the throughput in `summary.txt` still shows the difference.

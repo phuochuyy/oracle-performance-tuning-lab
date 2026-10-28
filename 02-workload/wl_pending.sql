@@ -23,7 +23,7 @@ begin
        and txn_ts >= timestamp '2025-12-01 00:00:00';
     l_execs := l_execs + 1;
   end loop;
-  insert into bank.wl_runs values (p_tag, sys_context('userenv', 'sid'), l_execs, l_execs, l_start, systimestamp);
+  insert into bank.wl_runs (run_tag, sid, execs, rows_fetched, started, ended) values (p_tag, sys_context('userenv', 'sid'), l_execs, l_execs, l_start, systimestamp);
   commit;
 end;
 /
