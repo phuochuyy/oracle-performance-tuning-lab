@@ -17,6 +17,7 @@
 | 8 | [Checking ADDM's advice](03-cases/08-addm/) | ADDM: "Sequence Usage" 94 % of activity | finding unchanged after the fix; control run ±4 % | not a real problem (23ai dynamic sequence cache, misleading time-model stat) — verify ADDM before acting |
 
 Problems I hit while building this (and how I fixed them): [notes/worklog.md](notes/worklog.md).
+Interview notes: [INTERVIEW.md](INTERVIEW.md).
 
 ## Goal
 
