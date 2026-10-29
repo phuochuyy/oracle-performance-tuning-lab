@@ -4,6 +4,8 @@ whenever sqlerror exit failure
 set verify off
 alter session set container = &1;
 
+-- inserts into WL_RUNS name their columns: case 3 adds ERRORS (wl_transfer.sql), and the positional
+-- INSERTs of the older procedures then failed to compile (ORA-00947) — found months later by a health check
 create table bank.wl_runs (
   run_tag       varchar2(100),
   sid           number,
@@ -37,7 +39,7 @@ begin
     end loop;
     l_execs := l_execs + 1;
   end loop;
-  insert into bank.wl_runs values (p_tag, sys_context('userenv', 'sid'), l_execs, l_rows, l_start, systimestamp);
+  insert into bank.wl_runs (run_tag, sid, execs, rows_fetched, started, ended) values (p_tag, sys_context('userenv', 'sid'), l_execs, l_rows, l_start, systimestamp);
   commit;
 end;
 /

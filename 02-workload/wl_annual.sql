@@ -36,11 +36,11 @@ begin
       l_rows := l_rows + 1; l_tot := l_tot + l_sum; l_tcnt := l_tcnt + l_cnt;
     end loop;
     close l_cur;
-    insert into bank.wl_results values (p_tag, p_dop, l_rows, l_tot, l_tcnt, dbms_utility.get_time - l_t0);
+    insert into bank.wl_results (run_tag, dop, rows_out, total, cnt, elapsed_cs) values (p_tag, p_dop, l_rows, l_tot, l_tcnt, dbms_utility.get_time - l_t0);
     commit;
     l_execs := l_execs + 1;
   end loop;
-  insert into bank.wl_runs values (p_tag, sys_context('userenv', 'sid'), l_execs, l_execs, l_start, systimestamp);
+  insert into bank.wl_runs (run_tag, sid, execs, rows_fetched, started, ended) values (p_tag, sys_context('userenv', 'sid'), l_execs, l_execs, l_start, systimestamp);
   commit;
 end;
 /

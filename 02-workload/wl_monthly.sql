@@ -25,7 +25,7 @@ begin
     end loop;
     l_execs := l_execs + 1;
   end loop;
-  insert into bank.wl_runs values (p_tag, sys_context('userenv', 'sid'), l_execs, l_rows, l_start, systimestamp);
+  insert into bank.wl_runs (run_tag, sid, execs, rows_fetched, started, ended) values (p_tag, sys_context('userenv', 'sid'), l_execs, l_rows, l_start, systimestamp);
   commit;
 end;
 /

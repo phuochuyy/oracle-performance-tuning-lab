@@ -225,3 +225,29 @@ What is left in the primary FRA is mostly flashback logs (38 %, ~6.3 GB, retenti
 Lessons: check FRA between heavy runs, not only before the first; for heavy-redo tests run the
 housekeeping between runs; consider a shorter `db_flashback_retention_target` and FRA usage alerting
 → both belong in oracle-backup-recovery-drills.
+
+## Found later: workload procedures invalid after case 3 (branch `fix/workload-insert-columns`)
+
+- The Ansible health check of the automation lab reported 7 invalid objects in PERF: `WL_STATEMENT`,
+  `WL_PENDING`, `WL_MONTHLY`, `WL_ANNUAL*`. `UTL_RECOMP` did not help; `ALTER PROCEDURE ... COMPILE` →
+  `ORA-00947: not enough values`. Case 3's `wl_transfer.sql` adds `WL_RUNS.ERRORS`, and the older
+  procedures inserted into `WL_RUNS` by position (6 values). The measured results were not affected (those
+  runs happened before the column was added), but the workload of cases 1, 2, 5, 6, 7 could not be re-run.
+- Fix: every INSERT into `WL_RUNS` / `WL_RESULTS` names its columns; procedures re-created in PERF, all 11
+  valid, `wl_monthly` smoke-tested (47 executions in 3 s, test row removed).
+- My own slip while re-creating them: a `sed` range meant to skip the one-line `create table` also ate the
+  start of the next procedure (a range end is only searched from the next line) — the script stopped on
+  the compile error; re-run with a plain `grep -v` of that line.
+
+## 2026-10-29 — SQLT
+
+- Installed SQLT into PERF. First try: `ORA-20103` — in a PDB SQLT needs a connect identifier. Before that,
+  my copy to prm3 failed silently: I used `rsync`, which the host does not have, and only saw it because
+  the install printed nothing useful (`SP2-0310`, script not found). Now `tar` over ssh.
+- XTRACT: my first two runs failed with `ORA-20104` (no SQLTXPLAIN password). I had assumed the prompts
+  from an older description of the tool: the line I sent as the password was taken by nothing, and
+  `ACCEPT ... HIDE` without a terminal returns empty. Read the script, then used a copy that takes it
+  as parameter 2.
+- The README draft said "stats are not incremental" and "default sample size" before I had checked them;
+  checked afterwards (`INCREMENTAL=FALSE`, `AUTO_SAMPLE_SIZE`) before committing.
+- Deleted my first (manual) XTRACT output (46 MB on prm3, a copy on the host) after the scripted run.
