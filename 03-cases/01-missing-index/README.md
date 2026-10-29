@@ -70,3 +70,9 @@ interval-partitioned since case 5 (partition pruning on `txn_ts` already cuts th
 change (full scan → index range scan) is the point. In the first dry run AWR had no BANK SQL at all for the
 "before" snapshot pair (`DBA_HIST_SQLSTAT` empty for that interval, no snapshot error); a second run captured
 it normally — if `top_sql.txt` is empty, the throughput in `summary.txt` still shows the difference.
+
+Re-run 2026-10-29 evening (4 sessions, 60 s each): **30.25 → 86,440 executions/s** — same shape, index present
+again at the end ([before](../../04-reports/01-missing-index/demo-r3-before/summary.txt),
+[after](../../04-reports/01-missing-index/demo-r3-after/summary.txt)). AWR's top SQL was empty for both pairs
+this time, and `V$SQL` no longer had the cursors a minute later (small shared pool on this VM) — so for a live
+demo, show the throughput and the plan, and quote the per-execution numbers from the case report.

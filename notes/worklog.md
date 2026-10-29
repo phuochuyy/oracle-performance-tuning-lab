@@ -238,3 +238,16 @@ housekeeping between runs; consider a shorter `db_flashback_retention_target` an
 - My own slip while re-creating them: a `sed` range meant to skip the one-line `create table` also ate the
   start of the next procedure (a range end is only searched from the next line) — the script stopped on
   the compile error; re-run with a plain `grep -v` of that line.
+
+## 2026-10-29 — SQLT
+
+- Installed SQLT into PERF. First try: `ORA-20103` — in a PDB SQLT needs a connect identifier. Before that,
+  my copy to prm3 failed silently: I used `rsync`, which the host does not have, and only saw it because
+  the install printed nothing useful (`SP2-0310`, script not found). Now `tar` over ssh.
+- XTRACT: my first two runs failed with `ORA-20104` (no SQLTXPLAIN password). I had assumed the prompts
+  from an older description of the tool: the line I sent as the password was taken by nothing, and
+  `ACCEPT ... HIDE` without a terminal returns empty. Read the script, then used a copy that takes it
+  as parameter 2.
+- The README draft said "stats are not incremental" and "default sample size" before I had checked them;
+  checked afterwards (`INCREMENTAL=FALSE`, `AUTO_SAMPLE_SIZE`) before committing.
+- Deleted my first (manual) XTRACT output (46 MB on prm3, a copy on the host) after the scripted run.
