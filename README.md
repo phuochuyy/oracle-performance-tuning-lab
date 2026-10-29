@@ -20,6 +20,12 @@ Second opinion with Oracle Support's **SQLT** ([`06-sqlt/`](06-sqlt/)): `XTRACT`
 found all four of its plans in AWR, best 0.001 s to worst 0.584 s, matching my measurements; each of its
 6 health-check observations checked (one real, intended: a plan needs an index that case 5 replaced).
 
+The AWR snapshots of all 8 cases are kept as **AWR baselines** (`PERF_CASE1_MISSING_INDEX` …
+`PERF_CASE8_ADDM`, snaps 33–108, 90-day expiration) — AWR retention is 8 days, so without them the live
+reports of 27–28 Oct would have been purged on ~4 Nov ([`05-scripts/awr_baselines.sql`](05-scripts/awr_baselines.sql),
+[`04-reports/awr-baselines.txt`](04-reports/awr-baselines.txt)). Checked: the case 1 "before" report regenerated
+from the database matches the saved one (Elapsed 2.02 min, DB Time 8.16 min).
+
 Problems I hit while building this (and how I fixed them): [notes/worklog.md](notes/worklog.md).
 
 ## Goal
