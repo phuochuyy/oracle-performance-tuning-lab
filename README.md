@@ -16,6 +16,10 @@
 | 7 | [Parallel query / PGA](03-cases/07-parallel-query/) | DOP 2 report 0.50–4.34 s (random TEMP spills), 4 users serial 12.4 s | DOP 2 0.55–0.81 s, 4 users serial 4.59 s / DOP 2 2.34 s | PGA target 446 MB → 1,400 MB (instance really used ~1.2 GB) |
 | 8 | [Checking ADDM's advice](03-cases/08-addm/) | ADDM: "Sequence Usage" 94 % of activity | finding unchanged after the fix; control run ±4 % | not a real problem (23ai dynamic sequence cache, misleading time-model stat) — verify ADDM before acting |
 
+Second opinion with Oracle Support's **SQLT** ([`06-sqlt/`](06-sqlt/)): `XTRACT` on the SQL of cases 2 and 5
+found all four of its plans in AWR, best 0.001 s to worst 0.584 s, matching my measurements; each of its
+6 health-check observations checked (one real, intended: a plan needs an index that case 5 replaced).
+
 Problems I hit while building this (and how I fixed them): [notes/worklog.md](notes/worklog.md).
 
 ## Goal
@@ -41,6 +45,7 @@ symptom, find the cause with AWR/ASH/ADDM, fix it, and prove the improvement wit
 | `02-workload/` | workload sessions and driver |
 | `03-cases/<n>-<name>/` | per case: symptom → evidence → root cause → fix → result table |
 | `04-reports/` | AWR, ASH, ADDM and SQL Monitor reports for each before/after pair |
+| `06-sqlt/` | SQLT install and `XTRACT` scripts (the tool itself comes from MOS), report and its observations checked |
 | `05-scripts/` | reusable diagnostics: top SQL/events from AWR, plans from AWR, blocking tree, ASH blocking, redo and PX stats, SQL Monitor helpers |
 
 AWR, ASH, ADDM and SQL Monitor need the Diagnostics and Tuning Pack licenses on a licensed database —

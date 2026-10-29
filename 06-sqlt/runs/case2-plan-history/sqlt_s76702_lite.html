@@ -1,0 +1,449 @@
+<html>
+<!-- $Header: 215187.1 sqlt_s76702_lite.html 23.1.240824 2026/10/29 abel.macias $ -->
+<!-- Copyright (c) 2000-2015, Oracle Corporation. All rights reserved. -->
+<!-- Author: abel.macias@oracle.com -->
+<head>
+<title>sqlt_s76702_lite.html</title>
+<style type="text/css">
+a {font-weight:bold; color:#663300;}
+body {font:10pt Arial,Helvetica,Verdana,Geneva,sans-serif; color:black; background:white;}
+h1 {font-size:16pt; font-weight:bold; color:#336699;}
+h2 {font-size:14pt; font-weight:bold; color:#336699;}
+h3 {font-size:12pt; font-weight:bold; color:#336699;}
+li {font-size:10pt; font-weight:bold; color:#336699; padding:0.1em 0 0 0;}
+table {font-size:8pt; color:black; background:white;}
+th {font-weight:bold; background:#cccc99; color:#336699; vertical-align:bottom; padding-left:3pt; padding-right:3pt; padding-top:1pt; padding-bottom:1pt;}
+td {text-align:left; background:#fcfcf0; vertical-align:top; padding-left:3pt; padding-right:3pt; padding-top:1pt; padding-bottom:1pt;}
+td.left {text-align:left}
+td.right {text-align:right}
+td.title {font-weight:bold;text-align:right;background-color:#cccc99;color:#336699}
+font.tablenote {font-size:8pt;font-style:italic;color:#336699}
+font.f {font-size:8pt; color:#999999;
+</style>
+</head>
+<body>
+<h1>215187.1 SQLT XTRACT 23.1.240824 Report: sqlt_s76702_lite.html</h1>
+<ul>
+<li><a href="#plans_summary">Plans Summary</a></li>
+<li><a href="#plans">Plans</a></li>
+<li><a href="#tables">Tables</a></li>
+<li><a href="#table_columns">Table Columns</a></li>
+<li><a href="#indexes">Indexes</a></li>
+<li><a href="#index_columns">Index Columns</a></li>
+</ul>
+
+<hr size="3"><a name="plans_summary"></a><h2>Plans Summary</h2>
+<pre>
+                           Avg
+                          User   Avg
+                     AVG   I/O Other
+               Avg   CPU  Wait  Wait
+           Elapsed  Time  Time  Time    Avg   Avg    Avg                                Total
+ Plan Hash Time in    in    in    in Buffer  Disk Direct  Avg Rows      Total   Total Version Total         Total
+     Value    secs  secs  secs  secs   Gets Reads Writes Processed Executions Fetches   Count Loads Invalidations Src Source
+---------- ------- ----- ----- ----- ------ ----- ------ --------- ---------- ------- ------- ----- ------------- --- ----------------
+1299576448   0.001 0.000 0.000 0.000     30     0      0         1     807912  808409       1     2             1 AWR DBA_HIST_SQLSTAT
+3125427224   0.010 0.004 0.000 0.000   6211     0      0         1      49879   50034       1     4             1 AWR DBA_HIST_SQLSTAT
+2776712995   0.017 0.008 0.000 0.000   3830     0      0         1      27787   27801       1     1             0 AWR DBA_HIST_SQLSTAT
+4088813652   0.584 0.267 0.188 0.000  93312 93194      0         1        824     824       1     2             0 AWR DBA_HIST_SQLSTAT
+</pre>
+
+
+<hr size="3"><a name="plans"></a><h2>Plans</h2>
+<table>
+<tr><th>#</th><th>Source</th><th>Plan<br>Hash Value</th><th>SQL<br>Handle</th><th>Plan<br>Name</th><th>Inst<br>ID</th><th>Child<br>Number</th><th>Executions</th><th>Format</th></tr>
+<tr>
+<td class= "title"><a href="#p1">1</a></td>
+<td class="left">DBA_HIST_SQL_PLAN</td>
+<td class="right">1299576448</td>
+<td class="left"></td>
+<td class="left"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="left">UNKNOWN</td>
+</tr>
+<tr>
+<td class= "title"><a href="#p2">2</a></td>
+<td class="left">DBA_HIST_SQL_PLAN</td>
+<td class="right">2776712995</td>
+<td class="left"></td>
+<td class="left"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="left">UNKNOWN</td>
+</tr>
+<tr>
+<td class= "title"><a href="#p3">3</a></td>
+<td class="left">DBA_HIST_SQL_PLAN</td>
+<td class="right">3125427224</td>
+<td class="left"></td>
+<td class="left"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="left">UNKNOWN</td>
+</tr>
+<tr>
+<td class= "title"><a href="#p4">4</a></td>
+<td class="left">DBA_HIST_SQL_PLAN</td>
+<td class="right">4088813652</td>
+<td class="left"></td>
+<td class="left"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="left">UNKNOWN</td>
+</tr>
+<tr>
+<td class= "title"><a href="#p5">5</a></td>
+<td class="left">PLAN_TABLE</td>
+<td class="right">1299576448</td>
+<td class="left"></td>
+<td class="left"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="right"></td>
+<td class="left">ADVANCED REPORT ADAPTIVE</td>
+</tr>
+</table>
+<font class="tablenote">Display of child plans is restricted up to 300 per phv as per tool parameter "r_rows_table_m".</font>
+<hr size="1"><a name="p1"></a><h3>DBA_HIST_SQL_PLAN&nbsp;&nbsp;phv:1299576448&nbsp;&nbsp;format:UNKNOWN</h3>
+<pre>SQL_ID 8wx3gpt1vwa72
+--------------------
+SELECT COUNT(*), SUM(AMOUNT) FROM BANK.TRANSACTIONS WHERE STATUS = :B1
+AND TXN_TS &gt;= TIMESTAMP &#39;2025-12-01 00:00:00&#39;
+
+Plan hash value: 1299576448
+
+---------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                 | Name                          | Rows  | Bytes | Cost (%CPU)| Time     | Pstart| Pstop |
+---------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT          |                               |       |       |    31 (100)|          |       |       |
+|   1 |  SORT AGGREGATE           |                               |     1 |    24 |            |          |       |       |
+|   2 |   PARTITION RANGE ITERATOR|                               |  6485 |   151K|    31   (0)| 00:00:01 |    25 |1048575|
+|*  3 |    INDEX RANGE SCAN       | TRANSACTIONS_STATUS_TS_AMT_IX |  6485 |   151K|    31   (0)| 00:00:01 |    25 |1048575|
+---------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   3 - SEL$1 / &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE(&#39;23.1.0&#39;)
+      DB_VERSION(&#39;23.1.0&#39;)
+      ALL_ROWS
+      OUTLINE_LEAF(@&quot;SEL$1&quot;)
+      INDEX(@&quot;SEL$1&quot; &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot; (&quot;TRANSACTIONS&quot;.&quot;STATUS&quot; &quot;TRANSACTIONS&quot;.&quot;TXN_TS&quot; &quot;TRANSACTIONS&quot;.&quot;AMOUNT&quot;))
+      END_OUTLINE_DATA
+  */
+
+Peeked Binds (identified by position):
+--------------------------------------
+
+   1 - :B1 (VARCHAR2(30), CSID=873): &#39;PENDING&#39;
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access(&quot;STATUS&quot;=:B1 AND &quot;TXN_TS&quot;&gt;=TIMESTAMP&#39; 2025-12-01 00:00:00.000000000&#39;)
+
+Query Block Registry:
+---------------------
+
+  SEL$1 (PARSER) [FINAL]
+
+
+
+</pre>
+
+<hr size="1"><a name="p2"></a><h3>DBA_HIST_SQL_PLAN&nbsp;&nbsp;phv:2776712995&nbsp;&nbsp;format:UNKNOWN</h3>
+<pre>SQL_ID 8wx3gpt1vwa72
+--------------------
+SELECT COUNT(*), SUM(AMOUNT) FROM BANK.TRANSACTIONS WHERE STATUS = :B1
+AND TXN_TS &gt;= TIMESTAMP &#39;2025-12-01 00:00:00&#39;
+
+Plan hash value: 2776712995
+
+----------------------------------------------------------------------------------------------------------
+| Id  | Operation                 | Name         | Rows  | Bytes | Cost (%CPU)| Time     | Pstart| Pstop |
+----------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT          |              |       |       |  1065 (100)|          |       |       |
+|   1 |  SORT AGGREGATE           |              |     1 |    24 |            |          |       |       |
+|   2 |   PARTITION RANGE ITERATOR|              |  6485 |   151K|  1065   (1)| 00:00:01 |    25 |1048575|
+|*  3 |    TABLE ACCESS FULL      | TRANSACTIONS |  6485 |   151K|  1065   (1)| 00:00:01 |    25 |1048575|
+----------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   3 - SEL$1 / &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE(&#39;23.1.0&#39;)
+      DB_VERSION(&#39;23.1.0&#39;)
+      ALL_ROWS
+      OUTLINE_LEAF(@&quot;SEL$1&quot;)
+      FULL(@&quot;SEL$1&quot; &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;)
+      END_OUTLINE_DATA
+  */
+
+Peeked Binds (identified by position):
+--------------------------------------
+
+   1 - :B1 (VARCHAR2(30), CSID=873): &#39;PENDING&#39;
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - filter(&quot;STATUS&quot;=:B1)
+
+Query Block Registry:
+---------------------
+
+  SEL$1 (PARSER) [FINAL]
+
+
+
+</pre>
+
+<hr size="1"><a name="p3"></a><h3>DBA_HIST_SQL_PLAN&nbsp;&nbsp;phv:3125427224&nbsp;&nbsp;format:UNKNOWN</h3>
+<pre>SQL_ID 8wx3gpt1vwa72
+--------------------
+SELECT COUNT(*), SUM(AMOUNT) FROM BANK.TRANSACTIONS WHERE STATUS = :B1
+AND TXN_TS &gt;= TIMESTAMP &#39;2025-12-01 00:00:00&#39;
+
+Plan hash value: 3125427224
+
+------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                            | Name                      | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                     |                           |       |       |  6572 (100)|          |
+|   1 |  SORT AGGREGATE                      |                           |     1 |    24 |            |          |
+|   2 |   TABLE ACCESS BY INDEX ROWID BATCHED| TRANSACTIONS              |  6545 |   153K|  6572   (1)| 00:00:01 |
+|*  3 |    INDEX RANGE SCAN                  | TRANSACTIONS_STATUS_TS_IX |  6545 |       |    26   (0)| 00:00:01 |
+------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   2 - SEL$1 / &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;
+   3 - SEL$1 / &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE(&#39;23.1.0&#39;)
+      DB_VERSION(&#39;23.1.0&#39;)
+      ALL_ROWS
+      OUTLINE_LEAF(@&quot;SEL$1&quot;)
+      INDEX_RS_ASC(@&quot;SEL$1&quot; &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot; (&quot;TRANSACTIONS&quot;.&quot;STATUS&quot; &quot;TRANSACTIONS&quot;.&quot;TXN_TS&quot;))
+      BATCH_TABLE_ACCESS_BY_ROWID(@&quot;SEL$1&quot; &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;)
+      END_OUTLINE_DATA
+  */
+
+Peeked Binds (identified by position):
+--------------------------------------
+
+   1 - :B1 (VARCHAR2(30), CSID=873): &#39;PENDING&#39;
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access(&quot;STATUS&quot;=:B1 AND &quot;TXN_TS&quot;&gt;=TIMESTAMP&#39; 2025-12-01 00:00:00.000000000&#39;)
+
+Query Block Registry:
+---------------------
+
+  SEL$1 (PARSER) [FINAL]
+
+
+
+</pre>
+
+<hr size="1"><a name="p4"></a><h3>DBA_HIST_SQL_PLAN&nbsp;&nbsp;phv:4088813652&nbsp;&nbsp;format:UNKNOWN</h3>
+<pre>SQL_ID 8wx3gpt1vwa72
+--------------------
+SELECT COUNT(*), SUM(AMOUNT) FROM BANK.TRANSACTIONS WHERE STATUS = :B1
+AND TXN_TS &gt;= TIMESTAMP &#39;2025-12-01 00:00:00&#39;
+
+Plan hash value: 4088813652
+
+-----------------------------------------------------------------------------------
+| Id  | Operation          | Name         | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |              |       |       | 25460 (100)|          |
+|   1 |  SORT AGGREGATE    |              |     1 |    24 |            |          |
+|*  2 |   TABLE ACCESS FULL| TRANSACTIONS |   109K|  2568K| 25460   (1)| 00:00:01 |
+-----------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   2 - SEL$1 / &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE(&#39;23.1.0&#39;)
+      DB_VERSION(&#39;23.1.0&#39;)
+      ALL_ROWS
+      OUTLINE_LEAF(@&quot;SEL$1&quot;)
+      FULL(@&quot;SEL$1&quot; &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;)
+      END_OUTLINE_DATA
+  */
+
+Peeked Binds (identified by position):
+--------------------------------------
+
+   1 - :B1 (VARCHAR2(30), CSID=873): &#39;PENDING&#39;
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter((&quot;TXN_TS&quot;&gt;=TIMESTAMP&#39; 2025-12-01 00:00:00.000000000&#39; AND
+              &quot;STATUS&quot;=:B1))
+
+Query Block Registry:
+---------------------
+
+  SEL$1 (PARSER) [FINAL]
+
+
+
+</pre>
+
+<hr size="1"><a name="p5"></a><h3>PLAN_TABLE&nbsp;&nbsp;phv:1299576448&nbsp;&nbsp;format:ADVANCED REPORT ADAPTIVE</h3>
+<pre><font class="crimson">SELECT</font> COUNT(*), SUM(AMOUNT) <font class="crimson">FROM</font> BANK.TRANSACTIONS <font class="crimson">WHERE</font> STATUS = :B1 AND TXN_TS &gt;= TIMESTAMP &#39;2025-12-01 00:00:00&#39;
+
+Plan hash value: 1299576448
+
+---------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                 | Name                          | Rows  | Bytes | Cost (%CPU)| Time     | Pstart| Pstop |
+---------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT          |                               |     1 |    24 |   476   (1)| 00:00:01 |       |       |
+|   1 |  SORT AGGREGATE           |                               |     1 |    24 |            |          |       |       |
+|   2 |   PARTITION RANGE ITERATOR|                               |   109K|  2567K|   476   (1)| 00:00:01 |    25 |1048575|
+|*  3 |    INDEX RANGE SCAN       | TRANSACTIONS_STATUS_TS_AMT_IX |   109K|  2567K|   476   (1)| 00:00:01 |    25 |1048575|
+---------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   3 - SEL$1 / &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot;
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      INDEX(@&quot;SEL$1&quot; &quot;TRANSACTIONS&quot;@&quot;SEL$1&quot; (&quot;TRANSACTIONS&quot;.&quot;STATUS&quot; &quot;TRANSACTIONS&quot;.&quot;TXN_TS&quot; &quot;TRANSACTIONS&quot;.&quot;AMOUNT&quot;))
+      OUTLINE_LEAF(@&quot;SEL$1&quot;)
+      ALL_ROWS
+      DB_VERSION(&#39;23.1.0&#39;)
+      OPTIMIZER_FEATURES_ENABLE(&#39;23.1.0&#39;)
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      END_OUTLINE_DATA
+  */
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - access(&quot;STATUS&quot;=:B1 AND &quot;TXN_TS&quot;&gt;=TIMESTAMP&#39; 2025-12-01 00:00:00.000000000&#39;)
+
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+
+   1 - (#keys=0) COUNT(*)[22], SUM(&quot;AMOUNT&quot;)[22]
+   2 - &quot;AMOUNT&quot;[NUMBER,22]
+   3 - &quot;AMOUNT&quot;[NUMBER,22]
+
+Query Block Registry:
+---------------------
+
+  SEL$1 (PARSER) [FINAL]
+
+
+</pre>
+
+<hr size="3"><a name="tables"></a><h2>Tables</h2>
+<pre>
+                                                                                                                   Avg                    Stat
+                                         Num  Sample                           Segment Segment         Empty   Avg Row Chain Global User  Type   Stale
+Table Name   Owner Part Temp   Count    Rows    Size  Perc Last Analyzed       Extents  Blocks Blocks Blocks Space Len   Cnt Stats  Stats Locked Stats
+------------ ----- ---- ---- ------- ------- ------- ----- ------------------- ------- ------- ------ ------ ----- --- ----- ------ ----- ------ -----
+TRANSACTIONS BANK  YES  N    8160000 8000000 8000000 100.0 2026-10-28/14:02:38                  67868      0     0  82     0 YES    NO           NO
+</pre>
+
+
+<hr size="3"><a name="table_columns"></a><h2>Table Columns</h2>
+<pre>
+                                                                  Fluctuatin                                          Avg                                  Fluctuatin
+                         Col     Num   Num  Sample            Num NDV                                                 Col                    Num           Endpoint   Global User
+Table Name   Column Name  ID    Rows Nulls    Size  Perc Distinct Count      Low Value High Value Last Analyzed       Len        Density Buckets Histogram Count      Stats  Stats
+------------ ----------- --- ------- ----- ------- ----- -------- ---------- --------- ---------- ------------------- --- -------------- ------- --------- ---------- ------ -----
+TRANSACTIONS ACCOUNT_ID    2 8000000     0 8000000 100.0   486016 FALSE      ""        ""         2026-10-28/14:02:38   5   2.057545e-06       1 NONE      FALSE      YES    NO
+TRANSACTIONS AMOUNT        6 8000000     0 8000000 100.0   179008 FALSE      ""        ""         2026-10-28/14:02:38   5   5.586343e-06       1 NONE      FALSE      YES    NO
+TRANSACTIONS STATUS        8 8000000     0 8000000 100.0        3 FALSE      ""        ""         2026-10-28/14:02:38   8   6.250000e-08       3 FREQUENCY FALSE      YES    NO
+TRANSACTIONS TXN_ID        1 8000000     0 8000000 100.0  8000000 FALSE      ""        ""         2026-10-28/14:02:38   6   1.250000e-07       1 NONE      FALSE      YES    NO
+TRANSACTIONS TXN_TS        3 8000000     0 8000000 100.0  7505408 FALSE      ""        ""         2026-10-28/14:02:38  11   1.332373e-07       1 NONE      FALSE      YES    NO
+</pre>
+
+
+<hr size="3"><a name="indexes"></a><h2>Indexes</h2>
+<pre>
+                                                                                                                                                      Avg    Avg
+                                                                                                                                                     Leaf   Data
+                                                                                                                                                   Blocks Blocks                         Stat
+                                                 Index                Num  Sample                           Distinct        Segment Segment   Leaf    per    per Clustering Global User  Type   Stale
+Table Name   Index Name                    Owner Type   Part Temp    Rows    Size  Perc Last Analyzed           Keys BLevel Extents  Blocks Blocks    Key    Key     Factor Stats  Stats Locked Stats
+------------ ----------------------------- ----- ------ ---- ---- ------- ------- ----- ------------------- -------- ------ ------- ------- ------ ------ ------ ---------- ------ ----- ------ -----
+TRANSACTIONS TRANSACTIONS_ACCT_TS_IX       BANK  NORMAL NO   N    8000000 8000000 100.0 2026-10-29/00:26:17  7999988      2     174   31304  30892      1      1    7998460 YES    NO           NO
+TRANSACTIONS TRANSACTIONS_PK               BANK  NORMAL NO   N    8192201  420688   5.1 2026-10-28/14:02:48  8192201      2      94   22912  22667      1      1    7852410 YES    NO           NO
+TRANSACTIONS TRANSACTIONS_STATUS_TS_AMT_IX BANK  NORMAL YES  N    8000000 8000000 100.0 2026-10-28/14:02:48  8000000      2                  34373      1      1    7996552 YES    NO           NO
+</pre>
+
+
+<hr size="3"><a name="index_columns"></a><h2>Index Columns</h2>
+<pre>
+                                                                                                    Fluctuatin                                          Avg                                  Fluctuatin
+                                           Col             Col     Num   Num  Sample            Num NDV                                                 Col                    Num           Endpoint   Global User
+Table Name   Index Name                    Pos Column Name  ID    Rows Nulls    Size  Perc Distinct Count      Low Value High Value Last Analyzed       Len        Density Buckets Histogram Count      Stats  Stats
+------------ ----------------------------- --- ----------- --- ------- ----- ------- ----- -------- ---------- --------- ---------- ------------------- --- -------------- ------- --------- ---------- ------ -----
+TRANSACTIONS TRANSACTIONS_ACCT_TS_IX         1 ACCOUNT_ID    2 8000000     0 8000000 100.0   486016 FALSE      ""        ""         2026-10-28/14:02:38   5   2.057545e-06       1 NONE      FALSE      YES    NO
+TRANSACTIONS TRANSACTIONS_ACCT_TS_IX         2 TXN_TS        3 8000000     0 8000000 100.0  7505408 FALSE      ""        ""         2026-10-28/14:02:38  11   1.332373e-07       1 NONE      FALSE      YES    NO
+TRANSACTIONS TRANSACTIONS_PK                 1 TXN_ID        1 8000000     0 8000000 100.0  8000000 FALSE      ""        ""         2026-10-28/14:02:38   6   1.250000e-07       1 NONE      FALSE      YES    NO
+TRANSACTIONS TRANSACTIONS_STATUS_TS_AMT_IX   1 STATUS        8 8000000     0 8000000 100.0        3 FALSE      ""        ""         2026-10-28/14:02:38   8   6.250000e-08       3 FREQUENCY FALSE      YES    NO
+TRANSACTIONS TRANSACTIONS_STATUS_TS_AMT_IX   2 TXN_TS        3 8000000     0 8000000 100.0  7505408 FALSE      ""        ""         2026-10-28/14:02:38  11   1.332373e-07       1 NONE      FALSE      YES    NO
+TRANSACTIONS TRANSACTIONS_STATUS_TS_AMT_IX   3 AMOUNT        6 8000000     0 8000000 100.0   179008 FALSE      ""        ""         2026-10-28/14:02:38   5   5.586343e-06       1 NONE      FALSE      YES    NO
+</pre>
+
+
+
+<hr size="3">
+<font class="f">215187.1 sqlt_s76702_lite.html 2026-10-29/16:44:07</font>
+</body>
+</html>
