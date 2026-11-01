@@ -9,14 +9,15 @@ case=$1 tag=$2 n=$3 secs=$4 proc=${5:-bank.wl_statement}
 : "${BANK_PASSWORD:?set BANK_PASSWORD}"
 H=$(cd "$(dirname "$0")/.." && pwd)
 out=$H/04-reports/$case/$tag; mkdir -p "$out"
-CONN="bank/${BANK_PASSWORD}@//localhost/perf.rac"
+# The password stays off the command line (ps): sqlplus starts with /nolog and CONNECT comes on stdin.
 
 snap() { sqlplus -s / as sysdba @"$H/05-scripts/awr_snap.sql" | tr -d ' \t' | grep -E '^[0-9]+$'; }
 
 b=$(snap)
 for i in $(seq 1 "$n"); do
-  sqlplus -s -L "$CONN" > "$out/session_$i.log" 2>&1 <<SQL &
+  sqlplus -s -L /nolog > "$out/session_$i.log" 2>&1 <<SQL &
 whenever sqlerror exit failure
+connect bank/"${BANK_PASSWORD}"@//localhost/perf.rac
 exec $proc('$case/$tag', $secs)
 exit
 SQL

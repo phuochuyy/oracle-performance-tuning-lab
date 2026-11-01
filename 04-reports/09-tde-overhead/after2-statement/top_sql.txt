@@ -1,0 +1,7 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+828n307p46agj	       0	  4   120006245      55630560.3      23441928		3003		 1 BEGIN bank.wl_statement('09-tde-overhead/after2-statement',
+a4hv2brfqt1vf 2098581459    8499846	   41.2 	   17.7 	   11		   0	       1.9 SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIO
+9vdh657tnhgux 3308782892	  4	  40204 	 9253.3 	  249		   4		 1 SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+

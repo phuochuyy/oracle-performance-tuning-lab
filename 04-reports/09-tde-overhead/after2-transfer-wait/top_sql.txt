@@ -1,0 +1,9 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+0c9pnvfjg1gn6	       0	  4   120014692       2942879.8        145220		1093		 1 BEGIN bank.wl_transfer_wait('09-tde-overhead/after2-transfer
+ck8pmcu0z92cb  534365006      50729	     70 	   61.3 	    5		   0		 1 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE - :B2 WHERE ACCOU
+f3jggcu1ud4g9 2771768670      50823	   39.2 	   35.6 	    1		   0		 1 INSERT INTO BANK.TRANSFER_LOG (FROM_ACCT, TO_ACCT, AMOUNT) V
+1b62d9m3rpg0a  534365006      50884	   25.5 	   23.8 	    4		   0		 1 UPDATE BANK.ACCOUNTS SET BALANCE = BALANCE + :B2 WHERE ACCOU
+9vdh657tnhgux 3308782892	  4	  39697 	 9663.5 	  231		   0		 1 SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+

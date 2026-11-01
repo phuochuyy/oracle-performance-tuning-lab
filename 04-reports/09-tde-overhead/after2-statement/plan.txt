@@ -1,0 +1,45 @@
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID 9vdh657tnhgux
+--------------------
+SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+
+Plan hash value: 3308782892
+
+------------------------------------------------------------------------------------------
+| Id  | Operation		   | Name	 | Rows  | Bytes | Cost (%CPU)| Time	 |
+------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	   |		 |	 |	 |     3 (100)| 	 |
+|   1 |  SORT AGGREGATE 	   |		 |     1 |     5 |	      | 	 |
+|   2 |   INDEX FULL SCAN (MIN/MAX)| ACCOUNTS_PK |     1 |     5 |     3   (0)| 00:00:01 |
+------------------------------------------------------------------------------------------
+
+SQL_ID a4hv2brfqt1vf
+--------------------
+SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIONS WHERE
+ACCOUNT_ID = :B1 AND TXN_TS >= TIMESTAMP '2025-10-01 00:00:00' ORDER BY
+TXN_TS DESC FETCH FIRST 50 ROWS ONLY
+
+Plan hash value: 2098581459
+
+--------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation			     | Name		       | Rows  | Bytes | Cost (%CPU)| Time     | Pstart| Pstop |
+--------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT		     |			       |       |       |    54 (100)|	       |       |       |
+|*  1 |  COUNT STOPKEY			     |			       |       |       |	    |	       |       |       |
+|   2 |   PARTITION RANGE ITERATOR	     |			       |     2 |    72 |    54	 (0)| 00:00:01 |1048575|    23 |
+|   3 |    VIEW 			     |			       |     2 |    72 |    54	 (0)| 00:00:01 |       |       |
+|   4 |     TABLE ACCESS BY LOCAL INDEX ROWID| TRANSACTIONS	       |     2 |    82 |    54	 (0)| 00:00:01 |1048575|    23 |
+|*  5 |      INDEX RANGE SCAN DESCENDING     | TRANSACTIONS_ACCT_TS_IX |     1 |       |    51	 (0)| 00:00:01 |1048575|    23 |
+--------------------------------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter(ROWNUM<=50)
+   5 - access("ACCOUNT_ID"=:B1 AND "TXN_TS">=TIMESTAMP' 2025-10-01 00:00:00.000000000')
+
+
+39 rows selected.
+

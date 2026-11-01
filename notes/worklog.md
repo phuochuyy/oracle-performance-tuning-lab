@@ -262,3 +262,12 @@ housekeeping between runs; consider a shorter `db_flashback_retention_target` an
   hide the old one first, then show the new one. Plan checked, 0 unusable partitions.
 - **Lesson:** a demo/reset script must bring back the *current* design, not the one from the day it was written;
   compare the live schema with the docs after a demo.
+
+## Case 9 — TDE overhead (branch `case/09-tde-overhead`)
+
+- Online encryption would have needed a second 3.3 GB copy with 3.7 GB free on the host → offline in-place encryption
+  (12 s offline, no extra space). Checked the space before choosing, not after.
+- First "after" round ran on a cold cache (orcl3 restarted for `WALLET_ROOT`): the monthly report looked 15 % slower,
+  the warm control round 8 %. Without the control I would have reported the restart, not TDE.
+- `run_workload.sh` had the BANK password on the sqlplus command line — fixed (stdin).
+- stb3 still needs the keystore before it applies redo again (noted in the case README).

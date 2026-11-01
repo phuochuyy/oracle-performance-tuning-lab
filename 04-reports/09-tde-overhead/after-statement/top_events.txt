@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 228.4	      53.7
+resmgr:cpu quantum			 Scheduler	       2787	 192.8	      45.3
+db file sequential read 		 User I/O	      12421	   1.7		.4
+cursor: pin S				 Concurrency	       1018	   1.5		.4
+cursor: pin S wait on X 		 Concurrency		 35	    .3		.1
+write complete waits			 Configuration		 27	    .2		 0
+log file sync				 Commit 		 48	    .2		 0
+library cache load lock 		 Concurrency		 47	    .1		 0
+
+8 rows selected.
+
