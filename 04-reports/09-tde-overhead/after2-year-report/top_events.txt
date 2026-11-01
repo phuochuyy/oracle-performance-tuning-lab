@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 120.7		98
+Async I/O submit			 User I/O	      66354	   1.4	       1.2
+write complete waits			 Configuration		 28	    .3		.3
+direct path read			 User I/O	       2773	    .3		.2
+db file sequential read 		 User I/O		907	    .1		.1
+log file sync				 Commit 		 44	    .1		.1
+resmgr:cpu quantum			 Scheduler		  9	    .1		.1
+flashback log file sync 		 User I/O		 12	     0		 0
+
+8 rows selected.
+

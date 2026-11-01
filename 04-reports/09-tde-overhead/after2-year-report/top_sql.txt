@@ -1,0 +1,6 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+04jw3dv42df29	       0	  1   120497779       119024215       4149811	     4140645		 1 BEGIN bank.wl_year_report('09-tde-overhead/after2-year-repor
+78m521145568x 2559818674	207    581851.1        574799.8 	20045	       20002		30 SELECT /*+ no_parallel */ CHANNEL, TXN_TYPE, COUNT(*) CNT, S
+

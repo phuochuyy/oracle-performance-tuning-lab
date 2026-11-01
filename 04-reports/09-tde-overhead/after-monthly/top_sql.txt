@@ -1,0 +1,6 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+0asu682bpqmqq 3410498840       4712	 101612 	46831.1 	 2749		1260		 5 SELECT CHANNEL, COUNT(*) CNT, SUM(AMOUNT) TOTAL FROM BANK.TR
+agkv4jhvu5n3f	       0	  4   119301756        55033810       3241749	     1485038		 1 BEGIN bank.wl_monthly('09-tde-overhead/after-monthly', 120);
+

@@ -1,0 +1,2 @@
+PAN of card 1: 9000********0018   BANK_DATA encrypted: YES
+datafile o1_mf_bank_dat_og136sbo_.dbf (3.3G): hits=0

@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+log file sync				 Commit 	      49829	 460.8	      94.8
+DB CPU					 CPU				  21.5	       4.4
+db file sequential read 		 User I/O	       7120	   1.8		.4
+write complete waits			 Configuration		 28	    .4		.1
+db file parallel read			 User I/O	       2033	    .3		.1
+cursor: pin S wait on X 		 Concurrency		 28	    .2		 0
+library cache load lock 		 Concurrency		 75	    .2		 0
+local write wait			 User I/O		 24	    .2		 0
+
+8 rows selected.
+

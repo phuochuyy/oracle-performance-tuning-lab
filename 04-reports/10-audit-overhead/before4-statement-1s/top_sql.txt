@@ -1,0 +1,6 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+6pzmy4bv20vtj	       0	  1    30002365        29486863      13760781		 511		 1 BEGIN bank.wl_statement('10-audit-overhead/before4-statement
+a4hv2brfqt1vf 2098581459    1258739	   16.6 	   16.5 	   11		   0	       1.9 SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIO
+

@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+log file sync				 Commit 	      50942	 466.9	      96.6
+DB CPU					 CPU				  14.3		 3
+write complete waits			 Configuration		 28	    .4		.1
+db file parallel read			 User I/O	       2038	    .3		.1
+control file parallel write		 System I/O		 46	    .3		.1
+cursor: pin S wait on X 		 Concurrency		 21	    .2		 0
+control file sequential read		 System I/O	       3001	    .1		 0
+resmgr:cpu quantum			 Scheduler		 21	    .1		 0
+
+8 rows selected.
+
