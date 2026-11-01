@@ -71,6 +71,13 @@ change (full scan → index range scan) is the point. In the first dry run AWR h
 "before" snapshot pair (`DBA_HIST_SQLSTAT` empty for that interval, no snapshot error); a second run captured
 it normally — if `top_sql.txt` is empty, the throughput in `summary.txt` still shows the difference.
 
+**Found 2026-11-01:** that demo left the index **global** — `fix.sql` was written before case 5 and always built a
+non-partitioned index, so `demo_reset.sql` + `fix.sql` replaced case 5's LOCAL index without any error. Found by
+checking the live schema against the case 5 README. `fix.sql` now builds a LOCAL index when the table is partitioned;
+the live index was rebuilt LOCAL online (built invisible, then the global one hidden, the local one shown, the global
+one dropped — Oracle refuses two visible indexes on the same columns, `ORA-14147`); plan again `PARTITION RANGE
+ITERATOR` → `INDEX RANGE SCAN DESCENDING`, no sort ([log](../../04-reports/01-missing-index/local-index-fix-20261101.log)).
+
 Re-run 2026-10-29 evening (4 sessions, 60 s each): **30.25 → 86,440 executions/s** — same shape, index present
 again at the end ([before](../../04-reports/01-missing-index/demo-r3-before/summary.txt),
 [after](../../04-reports/01-missing-index/demo-r3-after/summary.txt)). AWR's top SQL was empty for both pairs

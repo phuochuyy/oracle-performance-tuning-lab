@@ -1,0 +1,92 @@
+
+Session altered.
+
+Elapsed: 00:00:00.01
+== before
+
+INDEX_NAME															 PAR VISIBILIT
+-------------------------------------------------------------------------------------------------------------------------------- --- ---------
+TRANSACTIONS_ACCT_TS_IX 													 NO  VISIBLE
+
+Elapsed: 00:00:00.03
+== build the LOCAL index invisible, swap visibility, drop the global one, keep the original name
+
+Index created.
+
+Elapsed: 00:00:05.86
+
+Index altered.
+
+Elapsed: 00:00:00.02
+alter index bank.transactions_acct_ts_lix visible
+*
+ERROR at line 1:
+ORA-14147: There is an existing VISIBLE index defined on the same set of columns.
+Help: https://docs.oracle.com/error-help/db/ora-14147/
+
+
+
+Session altered.
+
+Elapsed: 00:00:00.00
+== retry: hide the global index first, then show the local one (ORA-14147 above)
+
+Index altered.
+
+Elapsed: 00:00:00.03
+
+Index altered.
+
+Elapsed: 00:00:00.00
+
+Index dropped.
+
+Elapsed: 00:00:00.09
+
+Index altered.
+
+Elapsed: 00:00:00.02
+== after
+
+INDEX_NAME															 PAR VISIBILIT STATUS
+-------------------------------------------------------------------------------------------------------------------------------- --- --------- --------
+TRANSACTIONS_ACCT_TS_IX 													 YES VISIBLE   N/A
+TRANSACTIONS_PK 														 NO  VISIBLE   VALID
+TRANSACTIONS_STATUS_TS_AMT_IX													 YES VISIBLE   N/A
+
+Elapsed: 00:00:00.02
+
+UNUSABLE_INDEX_PARTITIONS
+-------------------------
+			0
+
+Elapsed: 00:00:00.04
+== plan of the case 1 statement
+
+Explained.
+
+Elapsed: 00:00:00.02
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Plan hash value: 2098581459
+
+----------------------------------------------------------------------------------------
+| Id  | Operation			     | Name		       | Pstart| Pstop |
+----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT		     |			       |       |       |
+|   1 |  COUNT STOPKEY			     |			       |       |       |
+|   2 |   PARTITION RANGE ITERATOR	     |			       |1048575|    23 |
+|   3 |    VIEW 			     |			       |       |       |
+|   4 |     TABLE ACCESS BY LOCAL INDEX ROWID| TRANSACTIONS	       |1048575|    23 |
+|   5 |      INDEX RANGE SCAN DESCENDING     | TRANSACTIONS_ACCT_TS_IX |1048575|    23 |
+----------------------------------------------------------------------------------------
+
+12 rows selected.
+
+Elapsed: 00:00:00.13
+== timing (500 executions, random accounts, PL/SQL loop)
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:00:00.11

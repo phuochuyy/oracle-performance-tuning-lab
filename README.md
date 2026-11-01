@@ -35,7 +35,7 @@ symptom, find the cause with AWR/ASH/ADDM, fix it, and prove the improvement wit
 
 ## Environment
 
-- Oracle 23ai single instance orcl3 (prm3, 7 GB), PDB `PERF`, outside GoldenGate's scope; its Data Guard
+- Oracle AI Database 26ai (23.26) single instance orcl3 (prm3, 7 GB), PDB `PERF`, outside GoldenGate's scope; its Data Guard
   standby on stb3 was part of case 4 (commit latency per transport mode).
 - Data: BANKDB — branches, customers, accounts, cards, 8 M transactions, generated deterministically
   ([`01-setup/bankdb`](01-setup/bankdb/), counts and checksums to verify a reload).

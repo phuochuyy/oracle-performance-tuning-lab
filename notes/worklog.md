@@ -251,3 +251,14 @@ housekeeping between runs; consider a shorter `db_flashback_retention_target` an
 - The README draft said "stats are not incremental" and "default sample size" before I had checked them;
   checked afterwards (`INCREMENTAL=FALSE`, `AUTO_SAMPLE_SIZE`) before committing.
 - Deleted my first (manual) XTRACT output (46 MB on prm3, a copy on the host) after the scripted run.
+
+## 2026-11-01 — case 1 demo had turned the local index global (branch `fix/case1-local-index`)
+
+- **Problem:** `TRANSACTIONS_ACCT_TS_IX` was a non-partitioned (global) index; case 5 says it is LOCAL.
+- **Cause:** the case 1 live demo (10-29) ran `demo_reset.sql` + `fix.sql`; `fix.sql` predates partitioning and
+  always created a global index. No error, the query stayed fast, so nothing showed it.
+- **Fix:** `fix.sql` creates LOCAL when `TRANSACTIONS` is partitioned. Live index rebuilt LOCAL online: built
+  INVISIBLE first; my first swap order failed with `ORA-14147` (two visible indexes on the same columns) —
+  hide the old one first, then show the new one. Plan checked, 0 unusable partitions.
+- **Lesson:** a demo/reset script must bring back the *current* design, not the one from the day it was written;
+  compare the live schema with the docs after a demo.
