@@ -1,0 +1,10 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC	  ERRORS
+---------------------------------------- ---------- ---------- ---------- ------------- ------------- ----------
+10-audit-overhead/audit-update-transfer-	  4	 44347	      120	 369.53 	    1	       0
+wait
+
+

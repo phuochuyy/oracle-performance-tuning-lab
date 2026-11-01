@@ -271,3 +271,12 @@ housekeeping between runs; consider a shorter `db_flashback_retention_target` an
   the warm control round 8 %. Without the control I would have reported the restart, not TDE.
 - `run_workload.sh` had the BANK password on the sqlplus command line — fixed (stdin).
 - stb3 still needs the keystore before it applies redo again (noted in the case README).
+
+## Case 10 — Unified Auditing overhead (branch `case/10-audit-overhead`)
+
+- `audit policy x; select ...` on one line → ORA-03405, the policy was never enabled and three "audit" runs were
+  plain baselines. Caught because the audit record count did not move; runs renamed, rows in `bank.wl_runs` retagged.
+- The summary of a re-used tag mixes both runs (`wl_summary.sql` groups by tag) — a re-run needs a new tag.
+- A control run looked −14 % with zero audit records; repeating the off/on pair twice showed no cost. One run is
+  not a result.
+- Hot-read run: 800 MB of host disk in 30 s (audit rows + their redo) — kept runs short, disk guard in the runner.

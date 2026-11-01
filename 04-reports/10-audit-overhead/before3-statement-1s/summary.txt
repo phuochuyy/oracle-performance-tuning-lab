@@ -1,0 +1,8 @@
+
+Session altered.
+
+
+RUN_TAG 				   SESSIONS	 EXECS	  SECONDS EXECS_PER_SEC ROWS_PER_EXEC	  ERRORS
+---------------------------------------- ---------- ---------- ---------- ------------- ------------- ----------
+10-audit-overhead/before3-statement-1s		  1    1279086	       30      42636.01 	  1.9
+

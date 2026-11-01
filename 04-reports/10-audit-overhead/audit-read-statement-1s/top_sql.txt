@@ -1,0 +1,7 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+fjzzxatcaj3ca	       0	  1    30004573        24284941       2112952	       26079		 1 BEGIN bank.wl_statement('10-audit-overhead/audit-read-statem
+a4hv2brfqt1vf 2098581459      86541	   33.7 	   29.3 	   11		   0	       1.9 SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIO
+9vdh657tnhgux 3308782892	  1	  73146 	  60278 	 1228		  60		 1 SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+
