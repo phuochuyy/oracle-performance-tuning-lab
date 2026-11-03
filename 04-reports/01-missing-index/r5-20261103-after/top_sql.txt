@@ -1,0 +1,8 @@
+
+SQL_ID		     PHV      EXECS US_PER_EXEC CPU_US_PER_EXEC GETS_PER_EXEC READS_PER_EXEC ROWS_PER_EXEC SQL_TEXT
+------------- ---------- ---------- ----------- --------------- ------------- -------------- ------------- ------------------------------------------------------------
+fv142pyk09892	       0	  4  59271194.8      28130540.8      13815461		3779		 1 BEGIN bank.wl_statement('01-missing-index/r5-20261103-after'
+a4hv2brfqt1vf 2098581459    5011954	     32 	   15.2 	   11		   0	       1.9 SELECT TXN_TS, TXN_TYPE, AMOUNT, STATUS FROM BANK.TRANSACTIO
+9vdh657tnhgux 3308782892	  4	  50180 	10581.3 	  463		  16		 1 SELECT MAX(ACCOUNT_ID) FROM BANK.ACCOUNTS
+cvfqhm88a9k9s	       0	  4	  14052 	 2672.5 	   70		   5		 1 INSERT INTO BANK.WL_RUNS (RUN_TAG, SID, EXECS, ROWS_FETCHED,
+

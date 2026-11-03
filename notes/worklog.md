@@ -280,3 +280,13 @@ housekeeping between runs; consider a shorter `db_flashback_retention_target` an
 - A control run looked −14 % with zero audit records; repeating the off/on pair twice showed no cost. One run is
   not a result.
 - Hot-read run: 800 MB of host disk in 30 s (audit rows + their redo) — kept runs short, disk guard in the runner.
+
+## Re-check after run 5 (branch `check/20261103`)
+
+- Case 5 first re-run: 124.5 ms per execution vs 81.9 ms in the case README, same plan. I had changed two
+  things at once: 60 s instead of 120 s, and it ran while a compressed level 0 backup was running on the
+  standby host. Re-ran 120 s / 4 sessions with no RMAN on prm3 or stb1: 46.03 /s vs 48.73 /s (−5.5 %), which
+  matches the TDE cost from case 9. Both runs kept ([`04-reports/r5-20261103-recheck.md`](../04-reports/r5-20261103-recheck.md)).
+- AWR had no SQL statistics for the 120 s window (empty `top_sql.txt`); per-execution time taken from wall
+  time and the run count instead, with the formula checked against the original run.
+- Lesson: before a timing run, check what else is running on the *host*, not only in the database.

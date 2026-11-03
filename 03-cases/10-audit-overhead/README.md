@@ -69,7 +69,7 @@ many rows as the trail: [security lab, retention](https://github.com/phuochuyy/o
 
 ## Problems on the way
 
-- The first try never enabled a policy: `audit policy x; select …` on one line → `ORA-03405` in 23ai (one statement
+- The first try never enabled a policy: `audit policy x; select …` on one line → `ORA-03405` in 26ai (one statement
   per line). Those runs are kept as repeat baselines (`before2-*`, `before3-*`, with a `RENAMED.txt`), their rows in
   `bank.wl_runs` retagged — they show the run-to-run noise (±4 %).
 - The first control run read −14 % with no audit record written: it ran right after the audited transfers. Two
