@@ -74,5 +74,7 @@ many rows as the trail: [security lab, retention](https://github.com/phuochuyy/o
   `bank.wl_runs` retagged — they show the run-to-run noise (±4 %).
 - The first control run read −14 % with no audit record written: it ran right after the audited transfers. Two
   repeats of the pair (off / on / on / off) showed no difference — reported as no cost.
-- The 175,235 test records stay in the trail: deleting audit records on request is exactly what an auditor
-  flags. They leave through the retention job after 90 days, archived like everything else.
+- The 175,235 test records were not deleted directly (deleting audit records on request is exactly what an auditor
+  flags): they were archived to CSV first and then purged through the retention procedure, 4 records left. The
+  cut-off also took 4,375 real records younger than 90 days out of the trail (archived, not lost) — written up as a
+  deviation in the [security lab, retention](https://github.com/phuochuyy/oracle-security-compliance-lab/blob/main/04-auditing/README.md#retention--02_retentionsh).

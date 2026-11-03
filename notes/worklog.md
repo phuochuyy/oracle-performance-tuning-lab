@@ -290,3 +290,16 @@ housekeeping between runs; consider a shorter `db_flashback_retention_target` an
 - AWR had no SQL statistics for the 120 s window (empty `top_sql.txt`); per-execution time taken from wall
   time and the run count instead, with the formula checked against the original run.
 - Lesson: before a timing run, check what else is running on the *host*, not only in the database.
+
+## Passwords off the command line (branch `fix/passwords-off-cmdline`)
+
+- Found by grepping every repo after the backup lab's drill 1 kept the SYS password on the `rman` command line:
+  case 4 `set_transport.sh` / `fix_dbwr_io.sh` ran `dgmgrl -silent sys/<pw>@orcl3` inside the ssh command, and
+  case 3 `run_incident.sh` ran `sqlplus "bank/<pw>@..."` on prm3 — all readable with `ps` while they ran.
+- Fix: `CONNECT` on stdin. My first dgmgrl version (`dgmgrl -silent /nolog`, `connect ...;`) was rejected with
+  "Invalid option"; the form used by the HA/DR harness works (`dgmgrl -silent`, `connect sys/"<pw>"@orcl3`, no `;`).
+  Tested with `show configuration` through both scripts' `dg()`, `ps` sampled on prm3: 0 lines with the password.
+  `run_incident.sh` checked with `bash -n` only (re-running it changes balances); same `CONNECT` form as
+  `run_workload.sh`, which ran at 21:27.
+- Also: my first test said "1 line with the password" — `DB_PASSWORD` was empty (not in this repo's `lab.env`) and
+  `grep -F -e ""` matches every line. A check must fail on an empty pattern first (`: "${DB_PASSWORD:?}"`).

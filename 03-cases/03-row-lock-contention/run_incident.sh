@@ -8,10 +8,11 @@ set -eu
 tag=$1 every=$2 hold=$3
 H=$(cd "$(dirname "$0")/../.." && pwd)
 out=$H/04-reports/03-row-lock-contention/$tag; mkdir -p "$out"
-CONN="bank/${BANK_PASSWORD}@//localhost/perf.rac"
+# password on stdin (CONNECT inside the here-document), never on the sqlplus command line (ps)
 if [ "$every" -ge 0 ]; then
   ( sleep 20
-    sqlplus -s -L "$CONN" > "$out/batch.log" 2>&1 <<SQL
+    sqlplus -s -L /nolog > "$out/batch.log" 2>&1 <<SQL
+connect bank/"${BANK_PASSWORD}"@//localhost/perf.rac
 set timing on
 exec bank.batch_interest($every, $hold)
 exit

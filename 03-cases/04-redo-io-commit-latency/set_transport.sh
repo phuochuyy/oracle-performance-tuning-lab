@@ -7,7 +7,7 @@
 # usage (from the host): DB_PASSWORD=... ./set_transport.sh SYNC|FASTSYNC|ASYNC
 set -eu
 mode=$1; : "${DB_PASSWORD:?}"
-dg() { printf '%s;\n' "$@" | ssh -o BatchMode=yes oracle@prm3 ". ~/.bash_profile >/dev/null 2>&1; dgmgrl -silent sys/$DB_PASSWORD@orcl3" | { grep -vE "^$|^Connected" || true; }; }   # empty output is fine (e.g. "disable fast_start failover")
+dg() { { printf 'connect sys/"%s"@orcl3\n' "$DB_PASSWORD"; printf '%s;\n' "$@"; } | ssh -o BatchMode=yes oracle@prm3 ". ~/.bash_profile >/dev/null 2>&1; dgmgrl -silent" | { grep -vE "^$|^Connected" || true; }; }   # empty output is fine (e.g. "disable fast_start failover")
 case $mode in
   SYNC|FASTSYNC)
     # the FSFO target's LogXptMode cannot change while FSFO is enabled (ORA-16654)
