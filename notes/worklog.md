@@ -280,3 +280,26 @@ housekeeping between runs; consider a shorter `db_flashback_retention_target` an
 - A control run looked −14 % with zero audit records; repeating the off/on pair twice showed no cost. One run is
   not a result.
 - Hot-read run: 800 MB of host disk in 30 s (audit rows + their redo) — kept runs short, disk guard in the runner.
+
+## Re-check after run 5 (branch `check/20261103`)
+
+- Case 5 first re-run: 124.5 ms per execution vs 81.9 ms in the case README, same plan. I had changed two
+  things at once: 60 s instead of 120 s, and it ran while a compressed level 0 backup was running on the
+  standby host. Re-ran 120 s / 4 sessions with no RMAN on prm3 or stb1: 46.03 /s vs 48.73 /s (−5.5 %), which
+  matches the TDE cost from case 9. Both runs kept ([`04-reports/r5-20261103-recheck.md`](../04-reports/r5-20261103-recheck.md)).
+- AWR had no SQL statistics for the 120 s window (empty `top_sql.txt`); per-execution time taken from wall
+  time and the run count instead, with the formula checked against the original run.
+- Lesson: before a timing run, check what else is running on the *host*, not only in the database.
+
+## Passwords off the command line (branch `fix/passwords-off-cmdline`)
+
+- Found by grepping every repo after the backup lab's drill 1 kept the SYS password on the `rman` command line:
+  case 4 `set_transport.sh` / `fix_dbwr_io.sh` ran `dgmgrl -silent sys/<pw>@orcl3` inside the ssh command, and
+  case 3 `run_incident.sh` ran `sqlplus "bank/<pw>@..."` on prm3 — all readable with `ps` while they ran.
+- Fix: `CONNECT` on stdin. My first dgmgrl version (`dgmgrl -silent /nolog`, `connect ...;`) was rejected with
+  "Invalid option"; the form used by the HA/DR harness works (`dgmgrl -silent`, `connect sys/"<pw>"@orcl3`, no `;`).
+  Tested with `show configuration` through both scripts' `dg()`, `ps` sampled on prm3: 0 lines with the password.
+  `run_incident.sh` checked with `bash -n` only (re-running it changes balances); same `CONNECT` form as
+  `run_workload.sh`, which ran at 21:27.
+- Also: my first test said "1 line with the password" — `DB_PASSWORD` was empty (not in this repo's `lab.env`) and
+  `grep -F -e ""` matches every line. A check must fail on an empty pattern first (`: "${DB_PASSWORD:?}"`).

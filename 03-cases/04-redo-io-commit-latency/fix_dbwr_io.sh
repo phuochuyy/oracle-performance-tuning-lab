@@ -5,7 +5,7 @@
 # usage (from the host): DB_PASSWORD=... ./fix_dbwr_io.sh
 set -eu
 : "${DB_PASSWORD:?}"
-dg() { printf '%s;\n' "$@" | ssh -o BatchMode=yes oracle@prm3 ". ~/.bash_profile >/dev/null 2>&1; dgmgrl -silent sys/$DB_PASSWORD@orcl3"; }
+dg() { { printf 'connect sys/"%s"@orcl3\n' "$DB_PASSWORD"; printf '%s;\n' "$@"; } | ssh -o BatchMode=yes oracle@prm3 ". ~/.bash_profile >/dev/null 2>&1; dgmgrl -silent"; }
 sql() { ssh -o BatchMode=yes oracle@$1 ". ~/.bash_profile >/dev/null 2>&1; sqlplus -s / as sysdba" ; }
 
 echo "== before"; for h in prm3 stb3; do printf "show parameter filesystemio_options\nshow parameter db_writer_processes\nexit\n" | sql $h | grep -E "filesystemio|db_writer"; done

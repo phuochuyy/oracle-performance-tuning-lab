@@ -39,7 +39,7 @@ run-to-run variation is ±4 %, so the +8 % is not a proven effect.
   account for > 50 % of DB time. 93 % of DB time cannot also be "sequence loading".
 - [`sequence_refill_test.sql`](sequence_refill_test.sql): 10,000 `NEXTVAL` with `CACHE 20` caused
   only **4** `dc_sequences` row-cache modifications (vs 1 with `CACHE 10000`) and took 50 ms vs 40 ms.
-  23ai sizes the sequence cache dynamically under heavy use, so the refills ADDM blamed hardly happen.
+  26ai sizes the sequence cache dynamically under heavy use, so the refills ADDM blamed hardly happen.
 - The time model statistic `sequence load elapsed time` stays at ~93 % no matter what the cache is.
   My reading: the whole 120 s run is one PL/SQL call, and the statistic is accounted against that
   long call once a sequence load happened inside it. ADDM builds the finding on that number.

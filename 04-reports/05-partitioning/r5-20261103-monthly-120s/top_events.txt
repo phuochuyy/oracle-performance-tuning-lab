@@ -1,0 +1,14 @@
+
+EVENT					 WAIT_CLASS	      WAITS    SECONDS PCT_DB_TIME
+---------------------------------------- --------------- ---------- ---------- -----------
+DB CPU					 CPU				 220.5	      96.1
+db file sequential read 		 User I/O	       4600	   2.5	       1.1
+direct path read			 User I/O		428	   2.4		 1
+db file scattered read			 User I/O	       1682	   1.1		.5
+cursor: pin S wait on X 		 Concurrency		 44	     1		.4
+latch: shared pool			 Concurrency		219	    .7		.3
+library cache load lock 		 Concurrency		 68	    .2		.1
+write complete waits			 Configuration		 31	    .2		.1
+
+8 rows selected.
+
